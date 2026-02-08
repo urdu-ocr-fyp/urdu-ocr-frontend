@@ -40,3 +40,80 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# ================================
+# Node modules
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ================================
+# Angular build output
+# ================================
+dist/
+tmp/
+out-tsc/
+build/
+
+# ================================
+# Angular environment files
+# ================================
+src/environments/environment.prod.ts
+src/environments/environment.local.ts
+
+# ================================
+# Logs
+# ================================
+logs
+*.log
+
+# ================================
+# OS generated files
+# ================================
+.DS_Store
+Thumbs.db
+
+# ================================
+# IDE files
+# ================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ================================
+# Dependency directories
+# ================================
+bower_components/
+
+# ================================
+# Angular cache
+# ================================
+.angular/cache
+
+# ================================
+# Coverage directory
+# ================================
+coverage/
+
+# ================================
+# Compiled TypeScript
+# ================================
+*.tsbuildinfo
+
+# ================================
+# Environment variables
+# ================================
+.env
+.env.local
+.env.production
+
+# ================================
+# Firebase / deployment (if used)
+# ================================
+.firebase/
