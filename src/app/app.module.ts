@@ -7,6 +7,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
+import { UploadComponent } from './components/upload/upload.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { LandingComponent } from './components/landing/landing.component';
     LoginComponent,
     RegisterComponent,
     LandingComponent,
+    UploadComponent,
   ],
   imports: [
     BrowserModule,
