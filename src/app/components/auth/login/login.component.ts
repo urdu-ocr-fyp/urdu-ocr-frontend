@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService   // inject the AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -41,19 +43,18 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Simulate API call
-    setTimeout(() => {
-      this.isLoading = false;
-      const { email, password } = this.loginForm.value;
+    const { email, password } = this.loginForm.value;
 
-      // Demo login - replace with actual authentication
-      if (email === 'test@urduocr.com' && password === 'demo123') {
-        console.log('Login successful:', this.loginForm.value);
-        this.router.navigate(['/dashboard']);
+    // Use the AuthService to perform mock login
+    this.authService.login(email, password).subscribe((success: any) => {
+      this.isLoading = false;
+      if (success) {
+        this.authService.setLoggedIn(true);
+        this.router.navigate(['/upload']); // or '/dashboard' – whichever is your protected route
       } else {
-        this.errorMessage = 'Invalid email or password';
+        this.errorMessage = 'Invalid credentials (mock: any non‑empty email/password works)';
       }
-    }, 1500);
+    });
   }
 
   // Handle Google login
@@ -61,10 +62,11 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     console.log('Google login initiated');
 
-    // Simulate Google OAuth
+    // Simulate Google OAuth – just set logged in and redirect
     setTimeout(() => {
       this.isLoading = false;
-      this.router.navigate(['/dashboard']);
+      this.authService.setLoggedIn(true);
+      this.router.navigate(['/upload']);
     }, 1500);
   }
 
@@ -73,10 +75,10 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     console.log('GitHub login initiated');
 
-    // Simulate GitHub OAuth
     setTimeout(() => {
       this.isLoading = false;
-      this.router.navigate(['/dashboard']);
+      this.authService.setLoggedIn(true);
+      this.router.navigate(['/upload']);
     }, 1500);
   }
 
@@ -90,7 +92,7 @@ export class LoginComponent implements OnInit {
     const email = this.loginForm.get('email')?.value;
     if (email) {
       console.log('Password reset requested for:', email);
-      alert(`Password reset link sent to ${email}`);
+      alert(`Mock: password reset link sent to ${email}`);
     } else {
       alert('Please enter your email address first');
     }

@@ -4,6 +4,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { UploadComponent } from './components/upload/upload.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   // Landing page as default
@@ -13,7 +14,7 @@ const routes: Routes = [
   // Auth routes
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'upload', component: UploadComponent },
+  { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
 
 
   // Wildcard route
