@@ -1,0 +1,34 @@
+<nav class="relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
+        <div class="flex justify-start lg:w-0 lg:flex-1">
+          <a routerLink="/upload" class="flex items-center">
+            <div
+              class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                </path>
+              </svg>
+            </div>
+            <span
+              class="ml-3 text-xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">UrduScript
+              OCR</span>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-8">
+          <a routerLink="/upload" class="text-white border-b-2 border-cyan-400 pb-1">Upload</a>
+          <a routerLink="/history" class="text-gray-300 hover:text-white transition">My Documents</a>
+          <a routerLink="/account" class="text-gray-300 hover:text-white transition">Account</a>
+          <button (click)="logout()" class="text-gray-300 hover:text-white transition cursor-pointer">Logout</button>
+        </div>
+        <div class="md:hidden">
+          <button type="button" class="text-gray-400 hover:text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>

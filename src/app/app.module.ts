@@ -9,6 +9,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { OcrResultComponent } from './components/ocr-result/ocr-result.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { FooterComponent } from './shared/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { OcrResultComponent } from './components/ocr-result/ocr-result.component
     LandingComponent,
     UploadComponent,
     OcrResultComponent,
+    NavbarComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
