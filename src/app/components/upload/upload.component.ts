@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class UploadComponent {
   private maxSizeMB = 10;
   private maxSizeBytes = this.maxSizeMB * 1024 * 1024;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   // ✅ Getter for the template – avoids calling .some() directly in the template
   get hasMultipleItemsWithPreview(): boolean {
@@ -121,16 +122,50 @@ export class UploadComponent {
       this.errorMessage = 'No file selected.';
       return;
     }
-
+  
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-
+  
+    // Simulate API call
     setTimeout(() => {
       this.isLoading = false;
-      this.successMessage = `Successfully processed ${this.selectedFiles.length} file(s). (Mock)`;
-      setTimeout(() => this.clearAll(), 3000);
+  
+      // Generate mock extracted Urdu text
+      const mockExtractedText = this.generateMockUrduText(this.selectedFiles.length);
+  
+      // Prepare file data for passing (convert to serializable objects)
+      const filesData = this.selectedFiles.map((file, index) => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        previewUrl: this.previewUrls[index] // already a data URL or object URL
+      }));
+  
+      // Navigate to results page with state
+      this.router.navigate(['/ocr-result'], {
+        state: {
+          files: filesData,
+          extractedText: mockExtractedText
+        }
+      });
+  
+      // Clear current selection after navigation
+      this.clearAll();
     }, 2000);
+  }
+  
+  // Helper to generate mock Urdu text
+  private generateMockUrduText(fileCount: number): string {
+    const texts = [
+      "اسلام آباد پاکستان کا دارالحکومت ہے۔ یہ شہر 1960 کی دہائی میں تعمیر کیا گیا تھا۔",
+      "پاکستان کے صوبے پنجاب، سندھ، خیبر پختونخوا اور بلوچستان ہیں۔",
+      "اردو پاکستان کی قومی زبان ہے اور یہ ہندوستان میں بھی بولی جاتی ہے۔",
+      "تحریر: \"علم حاصل کرو خواہ تمہیں چین جانا پڑے۔\"",
+      "یہ ایک نمونہ متن ہے جو آپ کی اپ لوڈ کردہ تصاویر سے نکالا گیا ہے۔"
+    ];
+    // Return a combination based on file count
+    return texts.slice(0, Math.min(fileCount, texts.length)).join('\n\n');
   }
 
   logout(): void {
