@@ -5,9 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { LandingComponent } from './components/landing/landing.component';
 import { UploadComponent } from './components/upload/upload.component';
+import { OcrResultComponent } from './components/ocr-result/ocr-result.component';
 
 @NgModule({
   declarations: [
@@ -16,11 +17,13 @@ import { UploadComponent } from './components/upload/upload.component';
     RegisterComponent,
     LandingComponent,
     UploadComponent,
+    OcrResultComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
