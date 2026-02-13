@@ -1,146 +1,139 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css'] // if using SCSS
+  styleUrls: ['./upload.component.css']
 })
 export class UploadComponent {
-  // // File handling
-  // selectedFile: File | null = null;
-  // previewUrl: string | ArrayBuffer | null = null;
-  // selectedFileName: string = '';
-  // selectedFileSize: string = '';
+  selectedFiles: File[] = [];
+  previewUrls: (string | null)[] = [];
+  selectedIndex: number = 0;
 
-  // // UI states
-  // isLoading = false;
-  // errorMessage = '';
-  // successMessage = '';
+  isLoading: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
 
-  // constructor(
-  //   private http: HttpClient,
-  //   private router: Router
-  // ) {}
+  private allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  private allowedPdfType = 'application/pdf';
+  private maxSizeMB = 10;
+  private maxSizeBytes = this.maxSizeMB * 1024 * 1024;
 
-  // /**
-  //  * Triggered when user selects a file via input or dropzone
-  //  */
-  // onFileSelected(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files && input.files.length > 0) {
-  //     const file = input.files[0];
-  //     this.validateAndPreview(file);
-  //   }
-  // }
+  constructor(private authService: AuthService) {}
 
-  // /**
-  //  * Validate file type/size and generate preview
-  //  */
-  // private validateAndPreview(file: File): void {
-  //   // Reset previous messages
-  //   this.errorMessage = '';
-  //   this.successMessage = '';
+  // ✅ Getter for the template – avoids calling .some() directly in the template
+  get hasMultipleItemsWithPreview(): boolean {
+    return this.selectedFiles.length > 1 && this.previewUrls.some(url => url !== null);
+  }
 
-  //   // 1. Type validation (images + PDF)
-  //   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
-  //   if (!allowedTypes.includes(file.type)) {
-  //     this.errorMessage = 'Unsupported file format. Please upload JPG, PNG, or PDF.';
-  //     return;
-  //   }
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
 
-  //   // 2. Size validation (max 10 MB)
-  //   const maxSize = 10 * 1024 * 1024; // 10 MB
-  //   if (file.size > maxSize) {
-  //     this.errorMessage = 'File is too large. Maximum size is 10 MB.';
-  //     return;
-  //   }
+    const files = Array.from(input.files);
+    const validationError = this.validateFiles(files);
+    if (validationError) {
+      this.errorMessage = validationError;
+      input.value = '';
+      return;
+    }
 
-  //   // 3. Store file info
-  //   this.selectedFile = file;
-  //   this.selectedFileName = file.name;
-  //   this.selectedFileSize = this.formatFileSize(file.size);
+    this.clearPreviews();
+    this.selectedFiles = files;
+    this.generatePreviews(files);
+    this.selectedIndex = 0;
+    this.errorMessage = '';
+    input.value = '';
+  }
 
-  //   // 4. Generate preview (for images)
-  //   if (file.type.startsWith('image/')) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       this.previewUrl = e.target?.result ?? null;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   } else if (file.type === 'application/pdf') {
-  //     // Show a PDF icon instead of actual preview (optional)
-  //     this.previewUrl = 'assets/pdf-placeholder.svg'; // You can replace with a PDF icon
-  //   }
-  // }
+  private validateFiles(files: File[]): string | null {
+    for (const file of files) {
+      if (file.size > this.maxSizeBytes) {
+        return `File "${file.name}" exceeds ${this.maxSizeMB} MB.`;
+      }
+    }
 
-  // /**
-  //  * Remove current file and reset state
-  //  */
-  // clearPreview(): void {
-  //   this.selectedFile = null;
-  //   this.previewUrl = null;
-  //   this.selectedFileName = '';
-  //   this.selectedFileSize = '';
-  //   this.errorMessage = '';
-  //   this.successMessage = '';
-  // }
+    const images = files.filter(f => this.allowedImageTypes.includes(f.type));
+    const pdfs = files.filter(f => f.type === this.allowedPdfType);
 
-  // /**
-  //  * Send the image to the backend OCR API
-  //  */
-  // processImage(): void {
-  //   if (!this.selectedFile) {
-  //     this.errorMessage = 'No file selected.';
-  //     return;
-  //   }
+    if (pdfs.length > 0) {
+      if (files.length !== 1) {
+        return 'When uploading a PDF, you can only select that single file.';
+      }
+      if (pdfs.length !== 1) {
+        return 'Invalid PDF file.';
+      }
+    } else {
+      if (images.length !== files.length) {
+        return 'Only image files (JPG, PNG) are allowed when not uploading a PDF.';
+      }
+      if (images.length > 10) {
+        return 'You can upload at most 10 images.';
+      }
+    }
+    return null;
+  }
 
-  //   this.isLoading = true;
-  //   this.errorMessage = '';
-  //   this.successMessage = '';
+  private generatePreviews(files: File[]): void {
+    this.previewUrls = files.map(file => {
+      if (this.allowedImageTypes.includes(file.type)) {
+        return URL.createObjectURL(file);
+      }
+      return null;
+    });
+  }
 
-  //   const formData = new FormData();
-  //   formData.append('document', this.selectedFile);
+  removeFile(index: number): void {
+    if (this.previewUrls[index]) {
+      URL.revokeObjectURL(this.previewUrls[index]!);
+    }
+    this.selectedFiles.splice(index, 1);
+    this.previewUrls.splice(index, 1);
+    if (this.selectedFiles.length === 0) {
+      this.selectedIndex = 0;
+    } else if (this.selectedIndex >= this.selectedFiles.length) {
+      this.selectedIndex = this.selectedFiles.length - 1;
+    }
+  }
 
-  //   // 🔁 REPLACE WITH YOUR ACTUAL BACKEND ENDPOINT
-  //   this.http.post('https://api.urduscript.com/ocr', formData)
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         this.isLoading = false;
-  //         this.successMessage = 'Text extracted successfully! Redirecting...';
-          
-  //         // Optionally navigate to results page with response data
-  //         // this.router.navigate(['/results'], { state: { ocrData: response } });
-          
-  //         // Reset after 2 seconds
-  //         setTimeout(() => this.clearPreview(), 2000);
-  //       },
-  //       error: (error) => {
-  //         this.isLoading = false;
-  //         this.errorMessage = error.error?.message || 'Failed to process image. Please try again.';
-  //         console.error('OCR API error:', error);
-  //       }
-  //     });
-  // }
+  clearAll(): void {
+    this.clearPreviews();
+    this.selectedFiles = [];
+    this.previewUrls = [];
+    this.selectedIndex = 0;
+  }
 
-  // /**
-  //  * Logout action – clear session and redirect to login
-  //  */
-  // logout(): void {
-  //   // Clear authentication tokens, etc.
-  //   localStorage.removeItem('token');
-  //   this.router.navigate(['/login']);
-  // }
+  private clearPreviews(): void {
+    this.previewUrls.forEach(url => {
+      if (url) URL.revokeObjectURL(url);
+    });
+  }
 
-  // /**
-  //  * Helper: format bytes to human readable size
-  //  */
-  // private formatFileSize(bytes: number): string {
-  //   if (bytes === 0) return '0 Bytes';
-  //   const k = 1024;
-  //   const sizes = ['Bytes', 'KB', 'MB'];
-  //   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  //   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-  // }
+  selectFile(index: number): void {
+    if (index >= 0 && index < this.selectedFiles.length) {
+      this.selectedIndex = index;
+    }
+  }
+
+  processImage(): void {
+    if (this.selectedFiles.length === 0) {
+      this.errorMessage = 'No file selected.';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    setTimeout(() => {
+      this.isLoading = false;
+      this.successMessage = `Successfully processed ${this.selectedFiles.length} file(s). (Mock)`;
+      setTimeout(() => this.clearAll(), 3000);
+    }, 2000);
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

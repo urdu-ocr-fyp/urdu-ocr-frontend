@@ -1,136 +1,150 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 overflow-hidden">
-    <!-- ========== BACKGROUND DECORATIONS ========== -->
-    <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
-      <div class="absolute top-1/3 left-10 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl"></div>
-      <div class="absolute bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-      <!-- Floating Urdu script (same as landing page) -->
-      <div class="absolute top-20 left-10 opacity-5 text-8xl font-arabic hidden lg:block" style="font-family: 'Noto Nastaliq Urdu', serif;">
-        اردو
-      </div>
-      <div class="absolute bottom-20 right-10 opacity-5 text-8xl font-arabic hidden lg:block" style="font-family: 'Noto Nastaliq Urdu', serif;">
-        تحریر
+  <!-- Background decorations (same as before) -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 left-10 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-20 left-10 opacity-5 text-8xl font-arabic hidden lg:block"
+      style="font-family: 'Noto Nastaliq Urdu', serif;">اردو</div>
+    <div class="absolute bottom-20 right-10 opacity-5 text-8xl font-arabic hidden lg:block"
+      style="font-family: 'Noto Nastaliq Urdu', serif;">تحریر</div>
+  </div>
+
+  <!-- AUTHENTICATED NAVIGATION -->
+  <nav class="relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
+        <div class="flex justify-start lg:w-0 lg:flex-1">
+          <a routerLink="/upload" class="flex items-center">
+            <div
+              class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                </path>
+              </svg>
+            </div>
+            <span
+              class="ml-3 text-xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">UrduScript
+              OCR</span>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-8">
+          <a routerLink="/upload" class="text-white border-b-2 border-cyan-400 pb-1">Upload</a>
+          <a routerLink="/history" class="text-gray-300 hover:text-white transition">My Documents</a>
+          <a routerLink="/account" class="text-gray-300 hover:text-white transition">Account</a>
+          <button (click)="logout()" class="text-gray-300 hover:text-white transition cursor-pointer">Logout</button>
+        </div>
+        <div class="md:hidden">
+          <button type="button" class="text-gray-400 hover:text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
-  
-    <!-- ========== NAVIGATION (identical to landing page) ========== -->
-    <nav class="relative z-10">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
-          <!-- Logo -->
-          <div class="flex justify-start lg:w-0 lg:flex-1">
-            <a routerLink="/dashboard" class="flex items-center">
-              <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-              </div>
-              <span class="ml-3 text-xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
-                UrduScript OCR
-              </span>
-            </a>
-          </div>
-          <!-- Desktop Navigation (logged‑in state) -->
-          <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-8">
-            <a routerLink="/dashboard" class="text-white border-b-2 border-cyan-400 pb-1">Upload</a>
-            <a routerLink="/history" class="text-gray-300 hover:text-white transition">My Documents</a>
-            <a routerLink="/account" class="text-gray-300 hover:text-white transition">Account</a>
-            <button (click)="logout()" class="text-gray-300 hover:text-white transition">Logout</button>
-          </div>
-          <!-- Mobile menu button (kept for consistency) -->
-          <div class="md:hidden">
-            <button type="button" class="text-gray-400 hover:text-white">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
+  </nav>
+
+  <!-- ... (background and navigation unchanged) ... -->
+
+<main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-300 via-blue-300 to-white bg-clip-text text-transparent">
+          Upload Your Urdu Document
+        </h1>
+        <p class="text-gray-400 mt-3 text-lg">
+          Select up to 10 images or a single PDF
+        </p>
       </div>
-    </nav>
   
-    <!-- ========== MAIN UPLOAD SECTION ========== -->
-    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="max-w-4xl mx-auto">
-        <!-- Page Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-300 via-blue-300 to-white bg-clip-text text-transparent">
-            Upload Your Urdu Document
-          </h1>
-          <p class="text-gray-400 mt-3 text-lg">
-            Select a scanned image or photo of handwritten Urdu text
-          </p>
-        </div>
+      <!-- Upload card -->
+      <div class="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-blue-500/10 rounded-3xl"></div>
+        <div class="h-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 rounded-t-3xl"></div>
   
-        <!-- ===== UPLOAD CARD (glass morphism) ===== -->
-        <div class="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl shadow-2xl">
-          <!-- Gradient overlay & top bar (exactly like login card) -->
-          <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-blue-500/10 rounded-3xl"></div>
-          <div class="h-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 rounded-t-3xl"></div>
+        <div class="p-6 md:p-8 relative z-10">
+          <!-- Dropzone -->
+          <div *ngIf="selectedFiles.length === 0" 
+               class="border-2 border-dashed border-white/20 rounded-2xl p-8 text-center 
+                      hover:border-cyan-500/50 transition-all duration-300 cursor-pointer 
+                      group hover:scale-[1.02]"
+               (click)="fileInput.click()">
+            <svg class="w-20 h-20 mx-auto text-gray-500 mb-4 group-hover:text-cyan-400 transition" 
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <p class="text-gray-300 text-lg mb-2 font-medium">Drag and drop your files here</p>
+            <p class="text-gray-500 text-sm">or <span class="text-cyan-400 group-hover:underline">click to browse</span></p>
+            <p class="text-gray-600 text-xs mt-4">
+              Supports JPG, PNG, PDF • Max 10 MB each • 1 PDF or up to 10 images
+            </p>
+            <input #fileInput type="file" accept="image/*,.pdf" multiple class="hidden" (change)="onFileSelected($event)">
+          </div>
   
-          <div class="p-6 md:p-8 relative z-10">
-            <!-- ===== STATE 1: NO PREVIEW – SHOW DROPZONE ===== -->
-            <div *ngIf="!previewUrl" 
-                 class="border-2 border-dashed border-white/20 rounded-2xl p-8 text-center 
-                        hover:border-cyan-500/50 transition-all duration-300 cursor-pointer 
-                        group hover:scale-[1.02]"
-                 (click)="fileInput.click()">
-              <svg class="w-20 h-20 mx-auto text-gray-500 mb-4 group-hover:text-cyan-400 transition" 
-                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              <p class="text-gray-300 text-lg mb-2 font-medium">
-                Drag and drop your image here
-              </p>
-              <p class="text-gray-500 text-sm">
-                or <span class="text-cyan-400 group-hover:underline">click to browse</span>
-              </p>
-              <p class="text-gray-600 text-xs mt-4">
-                Supports JPG, PNG, PDF • Max 10 MB
-              </p>
-              <!-- Hidden file input -->
-              <input #fileInput 
-                     type="file" 
-                     accept="image/*,.pdf" 
-                     class="hidden" 
-                     (change)="onFileSelected($event)">
+          <!-- Gallery View -->
+          <div *ngIf="selectedFiles.length > 0" class="space-y-6">
+            <!-- Main preview -->
+            <div class="bg-gradient-to-br from-gray-800/50 to-slate-900/50 rounded-2xl p-4 border border-white/10 shadow-xl">
+              <div *ngIf="previewUrls[selectedIndex] as imgUrl">
+                <img [src]="imgUrl" alt="Preview" class="max-h-96 mx-auto rounded-lg object-contain">
+              </div>
+              <div *ngIf="!previewUrls[selectedIndex]" class="flex flex-col items-center justify-center py-8">
+                <svg class="w-20 h-20 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                <p class="text-gray-400 mt-2">PDF document</p>
+                <p class="text-gray-500 text-sm">{{ selectedFiles[selectedIndex].name }}</p>
+              </div>
             </div>
   
-            <!-- ===== STATE 2: PREVIEW AVAILABLE ===== -->
-            <div *ngIf="previewUrl" class="space-y-6">
-              <!-- Image preview card -->
-              <div class="bg-gradient-to-br from-gray-800/50 to-slate-900/50 rounded-2xl p-4 
-                          border border-white/10 shadow-xl">
-                <img [src]="previewUrl" 
-                     alt="Uploaded document preview" 
-                     class="max-h-96 mx-auto rounded-lg object-contain">
+            <!-- Thumbnail gallery – now using the getter -->
+            <div *ngIf="hasMultipleItemsWithPreview" 
+                 class="flex space-x-2 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-gray-600">
+              <div *ngFor="let file of selectedFiles; let i = index"
+                   (click)="selectFile(i)"
+                   class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-200"
+                   [class.border-cyan-400]="i === selectedIndex"
+                   [class.border-transparent]="i !== selectedIndex"
+                   [class.opacity-50]="i !== selectedIndex">
+                <img *ngIf="previewUrls[i]" [src]="previewUrls[i]" class="w-full h-full object-cover">
+                <div *ngIf="!previewUrls[i]" class="w-full h-full bg-gray-800 flex items-center justify-center">
+                  <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
               </div>
-              <!-- File metadata & remove button -->
-              <div class="flex flex-wrap items-center justify-between text-sm">
-                <div class="flex items-center space-x-2 text-gray-400">
-                  <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            </div>
+  
+            <!-- File list with individual delete buttons -->
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-600">
+              <div *ngFor="let file of selectedFiles; let i = index"
+                   class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition">
+                <div class="flex items-center space-x-3 text-sm truncate">
+                  <svg class="w-5 h-5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
-                  <span class="font-medium">{{ selectedFileName }}</span>
-                  <span>({{ selectedFileSize }})</span>
+                  <span class="text-gray-300 truncate max-w-[200px]">{{ file.name }}</span>
+                  <span class="text-gray-500 text-xs">({{ (file.size / 1024).toFixed(0) }} KB)</span>
                 </div>
-                <button (click)="clearPreview()" 
-                        class="text-red-400 hover:text-red-300 transition flex items-center gap-1 
-                               bg-red-500/10 px-3 py-1.5 rounded-lg border border-red-500/20 
-                               hover:bg-red-500/20">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button (click)="removeFile(i)" 
+                        class="text-red-400 hover:text-red-300 transition p-1 rounded-full hover:bg-red-500/10">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                   </svg>
-                  Remove
                 </button>
               </div>
-              <!-- PROCESS BUTTON (send to backend) -->
-              <button (click)="processImage()" 
-                      [disabled]="isLoading"
-                      class="w-full relative bg-gradient-to-r from-cyan-500 to-blue-500 
+            </div>
+  
+            <!-- Action buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button (click)="processImage()" [disabled]="isLoading"
+                      class="flex-1 relative bg-gradient-to-r from-cyan-500 to-blue-500 
                              text-white font-semibold py-3.5 rounded-xl 
                              shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 
                              hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed 
@@ -141,7 +155,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M9 12l2 2 4-5m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
-                  Extract Text from Image
+                  Process {{ selectedFiles.length }} File(s)
                 </span>
                 <span *ngIf="isLoading" class="flex items-center justify-center">
                   <svg class="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -151,89 +165,69 @@
                   Processing...
                 </span>
               </button>
-            </div>
   
-            <!-- Error & success messages (glass style) -->
-            <div *ngIf="errorMessage" 
-                 class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm 
-                        flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              {{ errorMessage }}
-            </div>
-            <div *ngIf="successMessage" 
-                 class="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm 
-                        flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              {{ successMessage }}
+              <button (click)="clearAll()" 
+                      class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 
+                             text-gray-300 font-medium rounded-xl transition-all duration-300
+                             hover:border-white/20">
+                Clear All
+              </button>
             </div>
           </div>
   
-          <!-- Bottom decorative bar -->
-          <div class="h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 opacity-50 rounded-b-3xl"></div>
+          <!-- Error & success messages -->
+          <div *ngIf="errorMessage" 
+               class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm 
+                      flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {{ errorMessage }}
+          </div>
+          <div *ngIf="successMessage" 
+               class="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm 
+                      flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            {{ successMessage }}
+          </div>
         </div>
   
-        <!-- ===== ADDITIONAL INFO CARDS (same design language) ===== -->
-        <div class="mt-12 grid md:grid-cols-3 gap-4 text-center">
-          <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
-            <div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-            </div>
-            <p class="text-cyan-400 font-semibold">Supported Formats</p>
-            <p class="text-gray-400 text-sm mt-1">JPG, PNG, PDF</p>
-          </div>
-          <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
-            <div class="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-              <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-              </svg>
-            </div>
-            <p class="text-purple-400 font-semibold">Max File Size</p>
-            <p class="text-gray-400 text-sm mt-1">10 MB per file</p>
-          </div>
-          <div class="p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
-            <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-              <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-            </div>
-            <p class="text-blue-400 font-semibold">Processing Time</p>
-            <p class="text-gray-400 text-sm mt-1">Usually a few seconds</p>
-          </div>
-        </div>
+        <div class="h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 opacity-50 rounded-b-3xl"></div>
       </div>
-    </main>
+    </div>
+  </main>
   
-    <!-- ========== FOOTER (simplified, matching theme) ========== -->
-    <footer class="relative z-10 border-t border-white/10 py-8 mt-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div class="flex items-center mb-4 md:mb-0">
-            <div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+  <!-- ... footer unchanged ... -->
+
+  <!-- Footer (optional – can be same as landing page) -->
+  <footer class="border-t border-white/10 py-12 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <a routerLink="/" class="flex items-center">
+            <div
+              class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                </path>
               </svg>
             </div>
-            <span class="ml-2 text-sm font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
-              UrduScript OCR
-            </span>
-          </div>
-          <p class="text-gray-400 text-xs">
-            &copy; 2024 UrduScript OCR. Transform handwritten Urdu into digital text.
-          </p>
-          <p class="text-gray-600 text-xs mt-2 md:mt-0 font-arabic" style="font-family: 'Noto Nastaliq Urdu', serif;">
-            اردو کو ڈیجیٹل بنانے کا پلیٹ فارم
-          </p>
+            <span
+              class="ml-3 text-xl font-bold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">UrduScript
+              OCR</span>
+          </a>
+          <p class="text-gray-400 mt-2 text-sm">Transforming handwritten Urdu into digital text since 2024</p>
         </div>
+        <!-- social links ... -->
       </div>
-    </footer>
-  </div>
+      <div class="mt-8 pt-8 border-t border-white/10 text-center">
+        <p class="text-gray-400 text-sm">&copy; 2024 UrduScript OCR. A Final Year Project. All rights reserved.</p>
+        <p class="text-gray-500 text-xs mt-2"><span class="font-arabic">اردو کو ڈیجیٹل بنانے کا پلیٹ فارم</span></p>
+      </div>
+    </div>
+  </footer>
+</div>
