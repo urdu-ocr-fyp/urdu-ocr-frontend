@@ -1,0 +1,38 @@
+/* Scrollbar styling for both light and dark modes */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thumb-gray-400::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+  }
+  
+  .dark .scrollbar-thumb-gray-600::-webkit-scrollbar-thumb {
+    background: #4b5563;
+  }
+  
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }

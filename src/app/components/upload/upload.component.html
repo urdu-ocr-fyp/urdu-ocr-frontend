@@ -1,49 +1,43 @@
-<div class="min-h-screen">
-  <!-- Background decorations (same as before) -->
+<div class="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-slate-900 dark:to-gray-950 overflow-hidden">
+  <!-- Background decorations - keep the same -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
     <div class="absolute top-1/3 left-10 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl"></div>
     <div class="absolute bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute top-20 left-10 opacity-5 text-8xl font-arabic hidden lg:block"
-      style="font-family: 'Noto Nastaliq Urdu', serif;">اردو</div>
-    <div class="absolute bottom-20 right-10 opacity-5 text-8xl font-arabic hidden lg:block"
-      style="font-family: 'Noto Nastaliq Urdu', serif;">تحریر</div>
   </div>
 
 
-  <!-- ... (background and navigation unchanged) ... -->
-
-<main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12">
-        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-300 via-blue-300 to-white bg-clip-text text-transparent">
+        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-700 via-blue-700 to-gray-700 dark:from-cyan-300 dark:via-blue-300 dark:to-white bg-clip-text text-transparent">
           Upload Your Urdu Document
         </h1>
-        <p class="text-gray-400 mt-3 text-lg">
+        <p class="text-gray-600 dark:text-gray-400 mt-3 text-lg">
           Select up to 10 images or a single PDF
         </p>
       </div>
   
       <!-- Upload card -->
-      <div class="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl shadow-2xl">
+      <div class="relative backdrop-blur-xl bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl">
         <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-blue-500/10 rounded-3xl"></div>
-        <div class="h-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 rounded-t-3xl"></div>
+        <div class="h-2 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 dark:from-cyan-400 dark:via-blue-400 dark:to-purple-400 rounded-t-3xl"></div>
   
         <div class="p-6 md:p-8 relative z-10">
           <!-- Dropzone -->
           <div *ngIf="selectedFiles.length === 0" 
-               class="border-2 border-dashed border-white/20 rounded-2xl p-8 text-center 
-                      hover:border-cyan-500/50 transition-all duration-300 cursor-pointer 
+               class="border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl p-8 text-center 
+                      hover:border-cyan-500 dark:hover:border-cyan-400 transition-all duration-300 cursor-pointer 
                       group hover:scale-[1.02]"
                (click)="fileInput.click()">
-            <svg class="w-20 h-20 mx-auto text-gray-500 mb-4 group-hover:text-cyan-400 transition" 
+            <svg class="w-20 h-20 mx-auto text-gray-400 dark:text-gray-500 mb-4 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition" 
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            <p class="text-gray-300 text-lg mb-2 font-medium">Drag and drop your files here</p>
-            <p class="text-gray-500 text-sm">or <span class="text-cyan-400 group-hover:underline">click to browse</span></p>
-            <p class="text-gray-600 text-xs mt-4">
+            <p class="text-gray-700 dark:text-gray-300 text-lg mb-2 font-medium">Drag and drop your files here</p>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">or <span class="text-cyan-600 dark:text-cyan-400 group-hover:underline">click to browse</span></p>
+            <p class="text-gray-500 dark:text-gray-500 text-xs mt-4">
               Supports JPG, PNG, PDF • Max 10 MB each • 1 PDF or up to 10 images
             </p>
             <input #fileInput type="file" accept="image/*,.pdf" multiple class="hidden" (change)="onFileSelected($event)">
@@ -52,32 +46,33 @@
           <!-- Gallery View -->
           <div *ngIf="selectedFiles.length > 0" class="space-y-6">
             <!-- Main preview -->
-            <div class="bg-gradient-to-br from-gray-800/50 to-slate-900/50 rounded-2xl p-4 border border-white/10 shadow-xl">
+            <div class="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-800/50 dark:to-slate-900/50 rounded-2xl p-4 border border-gray-300 dark:border-white/10 shadow-xl">
               <div *ngIf="previewUrls[selectedIndex] as imgUrl">
                 <img [src]="imgUrl" alt="Preview" class="max-h-96 mx-auto rounded-lg object-contain">
               </div>
               <div *ngIf="!previewUrls[selectedIndex]" class="flex flex-col items-center justify-center py-8">
-                <svg class="w-20 h-20 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-20 h-20 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                 </svg>
-                <p class="text-gray-400 mt-2">PDF document</p>
-                <p class="text-gray-500 text-sm">{{ selectedFiles[selectedIndex].name }}</p>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">PDF document</p>
+                <p class="text-gray-500 dark:text-gray-500 text-sm">{{ selectedFiles[selectedIndex].name }}</p>
               </div>
             </div>
   
-            <!-- Thumbnail gallery – now using the getter -->
+            <!-- Thumbnail gallery -->
             <div *ngIf="hasMultipleItemsWithPreview" 
-                 class="flex space-x-2 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-gray-600">
+                 class="flex space-x-2 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600">
               <div *ngFor="let file of selectedFiles; let i = index"
                    (click)="selectFile(i)"
                    class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-200"
-                   [class.border-cyan-400]="i === selectedIndex"
+                   [class.border-cyan-600]="i === selectedIndex"
+                   [class.dark:border-cyan-400]="i === selectedIndex"
                    [class.border-transparent]="i !== selectedIndex"
                    [class.opacity-50]="i !== selectedIndex">
                 <img *ngIf="previewUrls[i]" [src]="previewUrls[i]" class="w-full h-full object-cover">
-                <div *ngIf="!previewUrls[i]" class="w-full h-full bg-gray-800 flex items-center justify-center">
-                  <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div *ngIf="!previewUrls[i]" class="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+                  <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                   </svg>
                 </div>
@@ -85,19 +80,19 @@
             </div>
   
             <!-- File list with individual delete buttons -->
-            <div class="space-y-2 max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-600">
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600">
               <div *ngFor="let file of selectedFiles; let i = index"
-                   class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition">
+                   class="flex items-center justify-between p-3 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/10 transition">
                 <div class="flex items-center space-x-3 text-sm truncate">
-                  <svg class="w-5 h-5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
-                  <span class="text-gray-300 truncate max-w-[200px]">{{ file.name }}</span>
-                  <span class="text-gray-500 text-xs">({{ (file.size / 1024).toFixed(0) }} KB)</span>
+                  <span class="text-gray-700 dark:text-gray-300 truncate max-w-[200px]">{{ file.name }}</span>
+                  <span class="text-gray-500 dark:text-gray-500 text-xs">({{ (file.size / 1024).toFixed(0) }} KB)</span>
                 </div>
                 <button (click)="removeFile(i)" 
-                        class="text-red-400 hover:text-red-300 transition p-1 rounded-full hover:bg-red-500/10">
+                        class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-1 rounded-full hover:bg-red-500/10">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -109,7 +104,7 @@
             <!-- Action buttons -->
             <div class="flex flex-col sm:flex-row gap-3">
               <button (click)="processImage()" [disabled]="isLoading"
-                      class="flex-1 relative bg-gradient-to-r from-cyan-500 to-blue-500 
+                      class="flex-1 relative bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500 
                              text-white font-semibold py-3.5 rounded-xl 
                              shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 
                              hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed 
@@ -132,9 +127,9 @@
               </button>
   
               <button (click)="clearAll()" 
-                      class="px-6 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 
-                             text-gray-300 font-medium rounded-xl transition-all duration-300
-                             hover:border-white/20">
+                      class="px-6 py-3.5 bg-gray-200 hover:bg-gray-300 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 
+                             text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-300
+                             hover:border-gray-400 dark:hover:border-white/20">
                 Clear All
               </button>
             </div>
@@ -142,7 +137,7 @@
   
           <!-- Error & success messages -->
           <div *ngIf="errorMessage" 
-               class="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm 
+               class="mt-4 p-3 bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20 rounded-lg text-red-700 dark:text-red-400 text-sm 
                       flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -151,7 +146,7 @@
             {{ errorMessage }}
           </div>
           <div *ngIf="successMessage" 
-               class="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm 
+               class="mt-4 p-3 bg-green-100 dark:bg-green-500/10 border border-green-300 dark:border-green-500/20 rounded-lg text-green-700 dark:text-green-400 text-sm 
                       flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -160,11 +155,9 @@
           </div>
         </div>
   
-        <div class="h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-400 opacity-50 rounded-b-3xl"></div>
+        <div class="h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 opacity-50 rounded-b-3xl"></div>
       </div>
     </div>
   </main>
   
-  <!-- ... footer unchanged ... -->
-
 </div>
