@@ -1,28 +1,24 @@
-<div class="min-h-screen">
-  <!-- Background elements -->
+<div class="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-slate-900 dark:to-gray-950 overflow-hidden">
+  <!-- Background elements - keep the same as they're decorative -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
     <div class="absolute top-1/3 left-10 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl"></div>
     <div class="absolute bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute top-20 left-10 opacity-5 text-8xl font-arabic hidden lg:block" style="font-family: 'Noto Nastaliq Urdu', serif;">اردو</div>
-    <div class="absolute bottom-20 right-10 opacity-5 text-8xl font-arabic hidden lg:block" style="font-family: 'Noto Nastaliq Urdu', serif;">تحریر</div>
   </div>
-
-  
 
   <!-- Main content -->
   <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="text-center mb-8">
-      <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-300 via-blue-300 to-white bg-clip-text text-transparent">
+      <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-700 via-blue-700 to-gray-700 dark:from-cyan-300 dark:via-blue-300 dark:to-white bg-clip-text text-transparent">
         OCR Results
       </h1>
-      <p class="text-gray-400 mt-2">Extracted text from your uploaded documents</p>
+      <p class="text-gray-600 dark:text-gray-400 mt-2">Extracted text from your uploaded documents</p>
     </div>
 
     <!-- No data state -->
     <div *ngIf="!files || files.length === 0" class="text-center py-12">
-      <p class="text-gray-400 mb-4">No results to display. Please upload documents first.</p>
-      <a routerLink="/upload" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium rounded-xl hover:opacity-90 transition">
+      <p class="text-gray-600 dark:text-gray-400 mb-4">No results to display. Please upload documents first.</p>
+      <a routerLink="/upload" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500 text-white font-medium rounded-xl hover:opacity-90 transition">
         Go to Upload
       </a>
     </div>
@@ -31,42 +27,42 @@
     <div *ngIf="files && files.length > 0" class="grid lg:grid-cols-2 gap-6">
       <!-- Left column: file previews -->
       <div class="space-y-4">
-        <h2 class="text-xl font-semibold text-white mb-3">Uploaded Files</h2>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Uploaded Files</h2>
 
         <!-- Main preview -->
-        <div class="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4">
+        <div class="relative backdrop-blur-xl bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-4">
           <div *ngIf="files[selectedFileIndex]?.type?.startsWith('image/') && files[selectedFileIndex]?.previewUrl">
             <img [src]="files[selectedFileIndex].previewUrl" [alt]="files[selectedFileIndex].name" class="max-h-96 mx-auto rounded-lg object-contain">
           </div>
           <div *ngIf="files[selectedFileIndex]?.type === 'application/pdf'" class="flex flex-col items-center justify-center py-8">
-            <svg class="w-20 h-20 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-20 h-20 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
-            <p class="text-gray-400 mt-2">PDF document</p>
-            <p class="text-gray-500 text-sm">{{ files[selectedFileIndex].name }}</p>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">PDF document</p>
+            <p class="text-gray-500 dark:text-gray-500 text-sm">{{ files[selectedFileIndex].name }}</p>
           </div>
-          <div *ngIf="!files[selectedFileIndex]?.type?.startsWith('image/') && files[selectedFileIndex]?.type !== 'application/pdf'" class="text-center py-8 text-gray-400">
+          <div *ngIf="!files[selectedFileIndex]?.type?.startsWith('image/') && files[selectedFileIndex]?.type !== 'application/pdf'" class="text-center py-8 text-gray-600 dark:text-gray-400">
             No preview available
           </div>
         </div>
 
         <!-- File list with thumbnails -->
-        <div class="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4">
-          <div class="space-y-2 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-600">
+        <div class="relative backdrop-blur-xl bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-4">
+          <div class="space-y-2 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600">
             <div *ngFor="let file of files; let i = index" 
                  (click)="selectFile(i)" 
                  [class]="getFileItemClasses(i)">
               <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0 mr-3">
                 <img *ngIf="file.type.startsWith('image/') && file.previewUrl" [src]="file.previewUrl" class="w-full h-full object-cover">
-                <div *ngIf="file.type === 'application/pdf'" class="w-full h-full bg-gray-800 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div *ngIf="file.type === 'application/pdf'" class="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+                  <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                 </div>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm text-white truncate">{{ file.name }}</p>
-                <p class="text-xs text-gray-400">{{ (file.size / 1024).toFixed(0) }} KB</p>
+                <p class="text-sm text-gray-900 dark:text-white truncate">{{ file.name }}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400">{{ (file.size / 1024).toFixed(0) }} KB</p>
               </div>
             </div>
           </div>
@@ -74,30 +70,30 @@
       </div>
 
       <!-- Right column: extracted text -->
-      <div class="relative backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6">
-        <h2 class="text-xl font-semibold text-white mb-4">Extracted Urdu Text</h2>
+      <div class="relative backdrop-blur-xl bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Extracted Urdu Text</h2>
         <textarea [(ngModel)]="extractedText"
                   rows="15"
-                  class="w-full bg-gray-900/50 border border-white/10 rounded-xl p-4 text-white font-arabic text-right focus:outline-none focus:ring-2 focus:ring-cyan-500/50 resize-y"
+                  class="w-full bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-white/10 rounded-xl p-4 text-gray-900 dark:text-white font-arabic text-right focus:outline-none focus:ring-2 focus:ring-cyan-500/50 resize-y"
                   style="direction: rtl; font-family: 'Noto Nastaliq Urdu', serif;"
                   placeholder="Extracted text will appear here..."></textarea>
         <div class="flex flex-wrap gap-3 mt-4">
           <button (click)="copyToClipboard()"
-                  class="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-300 transition">
+                  class="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 rounded-lg text-gray-700 dark:text-gray-300 transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
             </svg>
             Copy
           </button>
           <button (click)="downloadAsTxt()"
-                  class="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-300 transition">
+                  class="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10 rounded-lg text-gray-700 dark:text-gray-300 transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             Download .txt
           </button>
           <a routerLink="/upload"
-             class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition ml-auto">
+             class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500 text-white rounded-lg hover:opacity-90 transition ml-auto">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -107,5 +103,4 @@
       </div>
     </div>
   </main>
-
 </div>

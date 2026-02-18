@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
   isLoading = false;
   showPassword = false;
   successMessage = '';
+  errorMessage = '';
 
   constructor(
     private router: Router,
@@ -46,6 +47,7 @@ export class RegisterComponent implements OnInit {
 
     this.isLoading = true;
     this.successMessage = '';
+    this.errorMessage = '';
 
     // Simulate API call
     setTimeout(() => {

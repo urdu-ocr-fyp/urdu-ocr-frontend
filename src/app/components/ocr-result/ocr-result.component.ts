@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { ThemeService } from 'src/app/services/theme/theme.service';
 
 interface FileData {
   name: string;
@@ -21,7 +22,8 @@ export class OcrResultComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    public themeService: ThemeService
   ) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { files: FileData[], extractedText: string };
@@ -37,10 +39,13 @@ export class OcrResultComponent {
 
   getFileItemClasses(index: number): string {
     const baseClasses = 'flex items-center p-2 rounded-lg cursor-pointer transition-all duration-200';
-    if (this.selectedFileIndex === index) {
-      return `${baseClasses} bg-cyan-500/20 border border-cyan-400`;
+    const isSelected = this.selectedFileIndex === index;
+    
+    if (isSelected) {
+      return `${baseClasses} bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500 dark:border-cyan-400`;
+    } else {
+      return `${baseClasses} bg-white/5 dark:bg-white/5 hover:bg-white/10 dark:hover:bg-white/10`;
     }
-    return `${baseClasses} bg-white/5`;
   }
 
   copyToClipboard(): void {
