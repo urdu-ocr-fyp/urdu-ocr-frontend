@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService, RegisterPayload } from '../../../services/auth/auth.service'; // Import AuthService
 
 @Component({
   selector: 'app-register',
@@ -10,13 +11,13 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   isLoading = false;
-  showPassword = false;
   successMessage = '';
   errorMessage = '';
 
   constructor(
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService // Inject AuthService
   ) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -33,11 +34,6 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  // Toggle password visibility
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-  }
-
   // Handle registration
   onRegister(): void {
     if (this.registerForm.invalid) {
@@ -49,73 +45,34 @@ export class RegisterComponent implements OnInit {
     this.successMessage = '';
     this.errorMessage = '';
 
-    // Simulate API call
-    setTimeout(() => {
-      this.isLoading = false;
-      console.log('Registration successful:', this.registerForm.value);
+    const formValue = this.registerForm.value;
+    const payload: RegisterPayload = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      email: formValue.email,
+      password: formValue.password
+    };
 
-      // Show success message
-      this.successMessage = 'Account created successfully! Redirecting to login...';
+    // Call AuthService to register the user with real-time API
+    this.authService.register(payload).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
+        this.successMessage = 'Account created successfully! Redirecting to login...';
 
-      // Redirect to login after delay
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 2000);
-    }, 2000);
-  }
-
-  // Handle Google registration
-  onGoogleRegister(): void {
-    this.isLoading = true;
-    console.log('Google registration initiated');
-
-    // Simulate Google OAuth
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/dashboard']);
-    }, 1500);
-  }
-
-  // Handle Discord registration
-  onDiscordRegister(): void {
-    this.isLoading = true;
-    console.log('Discord registration initiated');
-
-    // Simulate Discord OAuth
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/dashboard']);
-    }, 1500);
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
+      }
+    });
   }
 
   // Navigate to login
   navigateToLogin(): void {
     this.router.navigate(['/login']);
-  }
-
-  // Get password strength
-  getPasswordStrength(): string {
-    const password = this.registerForm.get('password')?.value;
-    if (!password) return '';
-
-    const hasLetters = /[a-zA-Z]/.test(password);
-    const hasNumbers = /\d/.test(password);
-    const length = password.length;
-
-    if (length >= 12 && hasLetters && hasNumbers) return 'Strong';
-    if (length >= 8 && hasLetters && hasNumbers) return 'Medium';
-    return 'Weak';
-  }
-
-  // Get password strength color
-  getPasswordStrengthColor(): string {
-    const strength = this.getPasswordStrength();
-    switch (strength) {
-      case 'Strong': return 'text-green-400';
-      case 'Medium': return 'text-yellow-400';
-      case 'Weak': return 'text-red-400';
-      default: return 'text-gray-400';
-    }
   }
 
   // Mark all form controls as touched
