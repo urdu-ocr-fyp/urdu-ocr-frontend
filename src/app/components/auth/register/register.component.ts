@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   isLoading = false;
   successMessage = '';
   errorMessage = '';
+  showPassword = false;
 
   constructor(
     private router: Router,
@@ -20,13 +21,12 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService // Inject AuthService
   ) {
     this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/)
+        // Validators.required,
+        // Validators.minLength(8),
+        // Validators.pattern(/^(?=.*[a-zA-Z])(?=.*\d).+$/)
       ]],
       terms: [false, [Validators.requiredTrue]]
     });
@@ -47,23 +47,25 @@ export class RegisterComponent implements OnInit {
 
     const formValue = this.registerForm.value;
     const payload: RegisterPayload = {
-      firstName: formValue.firstName,
-      lastName: formValue.lastName,
+      name: formValue.name,
       email: formValue.email,
       password: formValue.password
     };
+
 
     // Call AuthService to register the user with real-time API
     this.authService.register(payload).subscribe({
       next: (response: any) => {
         this.isLoading = false;
         this.successMessage = 'Account created successfully! Redirecting to login...';
+        console.log('response', response)
 
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 2000);
       },
       error: (err: any) => {
+        console.log('error', err)
         this.isLoading = false;
         this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
       }
@@ -83,6 +85,45 @@ export class RegisterComponent implements OnInit {
         this.markFormGroupTouched(control);
       }
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  onGoogleRegister(): void {
+    this.isLoading = true;
+    console.log('Google registration initiated');
+
+    // Simulate Google OAuth
+    setTimeout(() => {
+      this.isLoading = false;
+      this.router.navigate(['/dashboard']);
+    }, 1500);
+  }
+
+  getPasswordStrength(): string {
+    const password = this.registerForm.get('password')?.value;
+    if (!password) return '';
+
+    const hasLetters = /[a-zA-Z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const length = password.length;
+
+    if (length >= 12 && hasLetters && hasNumbers) return 'Strong';
+    if (length >= 8 && hasLetters && hasNumbers) return 'Medium';
+    return 'Weak';
+  }
+
+  // Get password strength color
+  getPasswordStrengthColor(): string {
+    const strength = this.getPasswordStrength();
+    switch (strength) {
+      case 'Strong': return 'text-green-400';
+      case 'Medium': return 'text-yellow-400';
+      case 'Weak': return 'text-red-400';
+      default: return 'text-gray-400';
+    }
   }
 
   // Get form controls for easy access

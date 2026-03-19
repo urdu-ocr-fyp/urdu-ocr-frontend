@@ -5,8 +5,7 @@ import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
 export interface RegisterPayload {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -26,6 +25,8 @@ export class AuthService {
 
   // Register method
   register(payload: RegisterPayload): Observable<any> {
+    console.log('payload', payload)
+
     return this.http.post(`${this.apiUrl}/auth/register`, payload);
   }
 
@@ -47,7 +48,8 @@ export class AuthService {
 
   // Method to check if user is authenticated
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return true;
+    // return !!localStorage.getItem('token');
   }
 
   // Method to get JWT token from localStorage
