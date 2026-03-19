@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService, LoginPayload } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -40,46 +40,58 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    const formValue = this.loginForm.value;
+    const payload: LoginPayload = {
+      email: formValue.email,
+      password: formValue.password
+    };
+
     this.isLoading = true;
     this.errorMessage = '';
-
-    const { email, password } = this.loginForm.value;
-
+    
     // Use the AuthService to perform mock login
-    this.authService.login(email, password).subscribe((success: any) => {
-      this.isLoading = false;
-      if (success) {
-        this.authService.setLoggedIn(true);
-        this.router.navigate(['/upload']); // or '/dashboard' – whichever is your protected route
-      } else {
-        this.errorMessage = 'Invalid credentials (mock: any non‑empty email/password works)';
+    this.authService.login(payload).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
+        console.log('response', response);
+        
+        // Make sure token/session is stored before navigating
+        // If your auth service handles storage, give it a moment
+        setTimeout(() => {
+          this.router.navigate(['/upload']);
+        }, 100); // Small delay to ensure storage completes
+      },
+      error: (err: any) => {
+        console.log('error', err)
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'login Failed';
       }
     });
   }
 
   // Handle Google login
   onGoogleLogin(): void {
-    this.isLoading = true;
-    console.log('Google login initiated');
+    // this.isLoading = true;
+    // console.log('Google login initiated');
 
-    // Simulate Google OAuth – just set logged in and redirect
-    setTimeout(() => {
-      this.isLoading = false;
-      this.authService.setLoggedIn(true);
-      this.router.navigate(['/upload']);
-    }, 1500);
+    // // Simulate Google OAuth – just set logged in and redirect
+    // setTimeout(() => {
+    //   this.isLoading = false;
+    //   this.authService.setLoggedIn(true);
+    //   this.router.navigate(['/upload']);
+    // }, 1500);
   }
 
   // Handle GitHub login
   onGithubLogin(): void {
-    this.isLoading = true;
-    console.log('GitHub login initiated');
+    // this.isLoading = true;
+    // console.log('GitHub login initiated');
 
-    setTimeout(() => {
-      this.isLoading = false;
-      this.authService.setLoggedIn(true);
-      this.router.navigate(['/upload']);
-    }, 1500);
+    // setTimeout(() => {
+    //   this.isLoading = false;
+    //   this.authService.setLoggedIn(true);
+    //   this.router.navigate(['/upload']);
+    // }, 1500);
   }
 
   // Navigate to register
