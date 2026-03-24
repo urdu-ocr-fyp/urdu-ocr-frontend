@@ -50,23 +50,40 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
     
     // Use the AuthService to perform mock login
-    this.authService.login(payload).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        console.log('response', response);
-        
-        // Make sure token/session is stored before navigating
-        // If your auth service handles storage, give it a moment
-        setTimeout(() => {
-          this.router.navigate(['/upload']);
-        }, 100); // Small delay to ensure storage completes
-      },
-      error: (err: any) => {
-        console.log('error', err)
-        this.isLoading = false;
-        this.errorMessage = err?.error?.message || 'login Failed';
-      }
-    });
+    // login.component.ts
+this.authService.login(payload).subscribe({
+  next: (response: any) => {
+    this.isLoading = false;
+    console.log('Login response:', response);
+
+    // Store the session cookie and user data from the nested structure
+    if (response?.user?.sessionCookie && response?.user) {
+      // Extract user data from response (excluding sessionCookie)
+      const { sessionCookie, ...userData } = response.user;
+      
+      // Store in localStorage
+      this.authService.setSession(sessionCookie, userData);
+      console.log('✅ Session stored successfully');
+      console.log('User data stored:', userData);
+      
+      // Get return URL from query params or default to /upload
+      const returnUrl = '/upload';
+      console.log('📍 Redirecting to:', returnUrl);
+      
+      // Navigate immediately
+      this.router.navigateByUrl(returnUrl, { replaceUrl: true });
+    } else {
+      console.warn('⚠️ No session cookie or user data in response');
+      console.log('Response structure:', response);
+      this.errorMessage = 'Invalid response from server';
+    }
+  },
+  error: (err: any) => {
+    console.error('Login error:', err);
+    this.isLoading = false;
+    this.errorMessage = err?.error?.message || 'Login failed. Please try again.';
+  }
+});
   }
 
   // Handle Google login
