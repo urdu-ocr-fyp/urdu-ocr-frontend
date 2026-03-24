@@ -1,3 +1,4 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -20,13 +21,13 @@ export interface LoginPayload {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
+  private readonly TOKEN_KEY = 'sessionCookie';
+  private readonly USER_KEY = 'userData';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   // Register method
   register(payload: RegisterPayload): Observable<any> {
-    console.log('payload', payload)
-
     return this.http.post(`${this.apiUrl}/auth/register`, payload);
   }
 
@@ -35,36 +36,43 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, payload);
   }
 
+  // Store session data after successful auth
+  setSession(sessionCookie: string, userData: any): void {
+    localStorage.setItem(this.TOKEN_KEY, sessionCookie);
+    localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
+  }
+
+  // Get stored session cookie (JWT)
+  getSessionCookie(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  // Get stored user data
+  getUserData(): any {
+    const data = localStorage.getItem(this.USER_KEY);
+    return data ? JSON.parse(data) : null;
+  }
+
   // Logout method
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
     this.router.navigate(['/login']);
   }
 
-  // Get profile method
+  // Check if user is authenticated (has a token)
+  isAuthenticated(): boolean {
+    return !!this.getSessionCookie();
+  }
+
+  // Get headers with Authorization Bearer token
+  private getHeaders(): HttpHeaders {
+    const token = this.getSessionCookie();
+    return token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+  }
+
+  // Get profile (protected endpoint)
   getProfile(): Observable<any> {
     return this.http.get(`${this.apiUrl}/user/me`, { headers: this.getHeaders() });
-  }
-
-  // Method to check if user is authenticated
-  isAuthenticated(): boolean {
-    return true;
-    // return !!localStorage.getItem('token');
-  }
-
-  // Method to get JWT token from localStorage
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  // Save JWT token after login
-  saveToken(token: string): void {
-    localStorage.setItem('token', token);
-  }
-
-  // Method to get the token in the request headers
-  private getHeaders(): HttpHeaders {
-    const token = this.getToken();
-    return token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
   }
 }

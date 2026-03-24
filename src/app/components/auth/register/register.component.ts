@@ -54,22 +54,39 @@ export class RegisterComponent implements OnInit {
 
 
     // Call AuthService to register the user with real-time API
-    this.authService.register(payload).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.successMessage = 'Account created successfully! Redirecting to login...';
-        console.log('response', response)
+    // signup.component.ts
+this.authService.register(payload).subscribe({
+  next: (response: any) => {
+    this.isLoading = false;
+    console.log('Signup response:', response);
 
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
-      },
-      error: (err: any) => {
-        console.log('error', err)
-        this.isLoading = false;
-        this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
-      }
-    });
+    // Store the session cookie and user data from the nested structure
+    if (response?.user?.sessionCookie && response?.user) {
+      // Extract user data from response (excluding sessionCookie)
+      const { sessionCookie, ...userData } = response.user;
+      
+      // Store in localStorage
+      this.authService.setSession(sessionCookie, userData);
+      console.log('✅ Session stored successfully');
+      console.log('User data stored:', userData);
+    } else {
+      console.warn('⚠️ No session cookie or user data in response');
+      console.log('Response structure:', response);
+    }
+
+    this.successMessage = 'Account created successfully! Redirecting to upload page...';
+    
+    // Navigate directly to upload page
+    setTimeout(() => {
+      this.router.navigate(['/upload'], { replaceUrl: true });
+    }, 1500);
+  },
+  error: (err: any) => {
+    console.error('Signup error:', err);
+    this.isLoading = false;
+    this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
+  }
+});
   }
 
   // Navigate to login
