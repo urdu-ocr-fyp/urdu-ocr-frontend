@@ -1,6 +1,6 @@
 // auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
@@ -21,30 +21,35 @@ export interface LoginPayload {
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private readonly TOKEN_KEY = 'sessionCookie';
   private readonly USER_KEY = 'userData';
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // Register method
+  // Register method - cookie automatically set by browser
   register(payload: RegisterPayload): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, payload);
   }
 
-  // Login method
+  // Login method - cookie automatically set by browser
   login(payload: LoginPayload): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, payload);
   }
 
-  // Store session data after successful auth
-  setSession(sessionCookie: string, userData: any): void {
-    localStorage.setItem(this.TOKEN_KEY, sessionCookie);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
+  // Get user profile (cookie automatically sent by browser)
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/me`);
   }
 
-  // Get stored session cookie (JWT)
-  getSessionCookie(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+  // Profile with userId (cookie automatically sent)
+  profile(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/me`, {
+      params: { userId }
+    });
+  }
+
+  // Store ONLY user data (no token)
+  setUserData(userData: any): void {
+    localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
   }
 
   // Get stored user data
@@ -53,28 +58,29 @@ export class AuthService {
     return data ? JSON.parse(data) : null;
   }
 
-  // Logout method
-  logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+  // Clear user data
+  clearUserData(): void {
     localStorage.removeItem(this.USER_KEY);
-    setTimeout(() => {
-      this.router.navigate(['/login'], { replaceUrl: true });
-    }, 1500);
   }
 
-  // Check if user is authenticated (has a token)
+  // Logout - clear user data, cookie will expire or be cleared by backend
+  logout(): void {
+    // Optional: Call logout endpoint to clear cookie on server
+    this.http.post(`${this.apiUrl}/auth/logout`, {}).subscribe({
+      next: () => {
+        this.clearUserData();
+        this.router.navigate(['/login'], { replaceUrl: true });
+      },
+      error: () => {
+        // Even if logout fails, clear local data
+        this.clearUserData();
+        this.router.navigate(['/login'], { replaceUrl: true });
+      }
+    });
+  }
+
+  // Check if user is authenticated by checking user data
   isAuthenticated(): boolean {
-    return !!this.getSessionCookie();
-  }
-
-  // Get headers with Authorization Bearer token
-  private getHeaders(): HttpHeaders {
-    const token = this.getSessionCookie();
-    return token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
-  }
-
-  // Get profile (protected endpoint)
-  getProfile(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/me`, { headers: this.getHeaders() });
+    return !!this.getUserData();
   }
 }

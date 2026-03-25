@@ -60,15 +60,8 @@ this.authService.register(payload).subscribe({
     this.isLoading = false;
     console.log('Signup response:', response);
 
-    // Store the session cookie and user data from the nested structure
-    if (response?.sessionCookie && response?.user) {
-      // Extract user data from response (excluding sessionCookie)
-      // const { sessionCookie, ...userData } = response.user;
-
-      // Store in localStorage
-      this.authService.setSession(response?.sessionCookie, response?.user);
-      console.log('✅ Session stored successfully');
-      console.log('User data stored:', response?.user);
+    if (response) {
+      this.authService.setUserData(response?.user);
     } else {
       console.log('Response structure:', response);
     }
