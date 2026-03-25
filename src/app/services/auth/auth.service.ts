@@ -57,7 +57,9 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-    this.router.navigate(['/login']);
+    setTimeout(() => {
+      this.router.navigate(['/login'], { replaceUrl: true });
+    }, 1500);
   }
 
   // Check if user is authenticated (has a token)

@@ -61,21 +61,20 @@ this.authService.register(payload).subscribe({
     console.log('Signup response:', response);
 
     // Store the session cookie and user data from the nested structure
-    if (response?.user?.sessionCookie && response?.user) {
+    if (response?.sessionCookie && response?.user) {
       // Extract user data from response (excluding sessionCookie)
-      const { sessionCookie, ...userData } = response.user;
-      
+      // const { sessionCookie, ...userData } = response.user;
+
       // Store in localStorage
-      this.authService.setSession(sessionCookie, userData);
+      this.authService.setSession(response?.sessionCookie, response?.user);
       console.log('✅ Session stored successfully');
-      console.log('User data stored:', userData);
+      console.log('User data stored:', response?.user);
     } else {
-      console.warn('⚠️ No session cookie or user data in response');
       console.log('Response structure:', response);
     }
 
     this.successMessage = 'Account created successfully! Redirecting to upload page...';
-    
+
     // Navigate directly to upload page
     setTimeout(() => {
       this.router.navigate(['/upload'], { replaceUrl: true });

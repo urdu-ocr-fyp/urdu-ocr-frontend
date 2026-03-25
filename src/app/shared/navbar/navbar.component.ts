@@ -14,8 +14,12 @@ export class NavbarComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    public themeService: ThemeService 
+    public themeService: ThemeService
   ) {}
+
+  ngOnInit(): void {
+    console.log('isAuthenticated', this.authService.isAuthenticated())
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
@@ -23,6 +27,12 @@ export class NavbarComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  login(): void {
+    setTimeout(() => {
+      this.router.navigate(['/login'], { replaceUrl: true });
+    }, 1500);
   }
 
   toggleMenu(): void {

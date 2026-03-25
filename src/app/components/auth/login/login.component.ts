@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     // Use the AuthService to perform mock login
     // login.component.ts
 this.authService.login(payload).subscribe({
@@ -57,19 +57,19 @@ this.authService.login(payload).subscribe({
     console.log('Login response:', response);
 
     // Store the session cookie and user data from the nested structure
-    if (response?.user?.sessionCookie && response?.user) {
+    if (response?.sessionCookie && response?.user) {
       // Extract user data from response (excluding sessionCookie)
-      const { sessionCookie, ...userData } = response.user;
-      
+      // const { sessionCookie, ...userData } = response.user;
+
       // Store in localStorage
-      this.authService.setSession(sessionCookie, userData);
+      this.authService.setSession(response?.sessionCookie, response?.user);
       console.log('✅ Session stored successfully');
-      console.log('User data stored:', userData);
-      
+      console.log('User data stored:', response?.user);
+
       // Get return URL from query params or default to /upload
       const returnUrl = '/upload';
       console.log('📍 Redirecting to:', returnUrl);
-      
+
       // Navigate immediately
       this.router.navigateByUrl(returnUrl, { replaceUrl: true });
     } else {

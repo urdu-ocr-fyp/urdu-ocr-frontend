@@ -19,14 +19,14 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    this.api.get('/').subscribe({
-      next: (res) => {
-        console.log('Backend connected:', res);
-      },
-      error: (err) => {
-        console.error('Backend connection failed:', err);
-      }
-    });
+    // this.api.get('/').subscribe({
+    //   next: (res) => {
+    //     console.log('Backend connected:', res);
+    //   },
+    //   error: (err) => {
+    //     console.error('Backend connection failed:', err);
+    //   }
+    // });
   }
 
   // Function to check if the URL is the root URL
