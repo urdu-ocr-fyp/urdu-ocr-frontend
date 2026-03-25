@@ -13,6 +13,7 @@ import { OcrResultComponent } from './components/ocr-result/ocr-result.component
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     OcrResultComponent,
     NavbarComponent,
     FooterComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
