@@ -19,17 +19,20 @@
 
       <!-- Desktop Navigation & Theme Toggle -->
       <div class="hidden md:flex items-center space-x-8">
-        <div *ngIf="isLoggedIn" class="authenticatedLinks">
+        <div *ngIf="isLoggedIn" class="flex items-center space-x-6">
           <a routerLink="/upload"
-             class="text-gray-700 dark:text-white border-b-2 border-cyan-600 dark:border-cyan-400 pb-1 font-medium">
+             routerLinkActive="border-b-2 border-cyan-600 dark:border-cyan-400 text-gray-900 dark:text-white"
+             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
             Upload
           </a>
           <a routerLink="/history"
-             class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium">
+             routerLinkActive="border-b-2 border-cyan-600 dark:border-cyan-400 text-gray-900 dark:text-white"
+             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
             My Documents
           </a>
           <a routerLink="/profile"
-             class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium">
+             routerLinkActive="border-b-2 border-cyan-600 dark:border-cyan-400 text-gray-900 dark:text-white"
+             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
             Profile
           </a>
           <button (click)="logout()"
@@ -37,14 +40,18 @@
             Logout
           </button>
         </div>
+      
         <button *ngIf="!isLoggedIn" (click)="login()"
                 class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium cursor-pointer">
           Login
         </button>
-
+      
+        <!-- Divider -->
+        <div *ngIf="isLoggedIn" class="h-5 w-px bg-gray-200 dark:bg-gray-700"></div>
+      
         <!-- Theme toggle -->
         <button (click)="themeService.toggleTheme()"
-                class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white p-2 rounded-full transition"
+                class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                 [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
           <svg *ngIf="themeService.isDarkMode()" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
