@@ -6,6 +6,8 @@ import { LandingComponent } from './components/landing/landing.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { AuthGuard } from './guards/auth.guard';
 import { OcrResultComponent } from './components/ocr-result/ocr-result.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   // Landing page as default
@@ -17,6 +19,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
   { path: 'ocr-result', component: OcrResultComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
 
 
   // Wildcard route

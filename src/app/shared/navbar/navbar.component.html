@@ -28,9 +28,9 @@
            class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium">
           My Documents
         </a>
-        <a routerLink="/account"
+        <a *ngIf="isLoggedIn" routerLink="/profile"
            class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium">
-          Account
+          Profile 
         </a>
         <button *ngIf="isLoggedIn" (click)="logout()"
                 class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium cursor-pointer">

@@ -101,15 +101,15 @@ export class LoginComponent implements OnInit {
   }
 
   // Forgot password
-  onForgotPassword(): void {
-    const email = this.loginForm.get('email')?.value;
-    if (email) {
-      console.log('Password reset requested for:', email);
-      alert(`Mock: password reset link sent to ${email}`);
-    } else {
-      alert('Please enter your email address first');
-    }
-  }
+  // onForgotPassword(): void {
+  //   const email = this.loginForm.get('email')?.value;
+  //   if (email) {
+  //     console.log('Password reset requested for:', email);
+  //     alert(`Mock: password reset link sent to ${email}`);
+  //   } else {
+  //     alert('Please enter your email address first');
+  //   }
+  // }
 
   // Mark all form controls as touched
   private markFormGroupTouched(formGroup: FormGroup): void {
