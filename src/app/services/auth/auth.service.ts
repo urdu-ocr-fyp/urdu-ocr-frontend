@@ -83,4 +83,18 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getUserData();
   }
+
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  // Reset password using token and new password
+  resetPassword(resetToken: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/reset-password`, { resetToken, newPassword });
+  }
+
+  // profile.service.ts
+changePassword(oldPassword: string, newPassword: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/auth/change-password`, { oldPassword, newPassword });
+}
 }

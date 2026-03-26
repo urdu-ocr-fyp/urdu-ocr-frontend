@@ -14,6 +14,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     NavbarComponent,
     FooterComponent,
     ProfileComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,

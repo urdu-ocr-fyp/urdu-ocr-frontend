@@ -18,12 +18,12 @@ export class ProfileService {
 
   // Update user name/email
   updateProfile(name: string, email: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/user/me`, { name, email });
+    return this.http.put(`${this.apiUrl}/user/profile`, { name, email });
   }
 
   // Delete user account
   deleteAccount(): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/user/me`);
+    return this.http.delete(`${this.apiUrl}/user/account`);
   }
 
   // Get Stripe checkout URL for a plan

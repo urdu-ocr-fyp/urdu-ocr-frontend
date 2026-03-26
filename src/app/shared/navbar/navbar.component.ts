@@ -18,7 +18,6 @@ export class NavbarComponent {
   ) {}
 
   ngOnInit(): void {
-    console.log('isAuthenticated', this.authService.isAuthenticated())
   }
 
   get isLoggedIn(): boolean {

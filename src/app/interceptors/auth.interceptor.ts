@@ -15,21 +15,13 @@ export class AuthInterceptor implements HttpInterceptor {
       withCredentials: true
     });
     
-    console.log('🔐 Interceptor: Adding withCredentials to:', req.url);
-    
     // Pass the modified request to the next handler
     return next.handle(authReq).pipe(
       tap({
         next: (event) => {
-          if (event instanceof HttpResponse) {
-            console.log('✅ Request successful:', req.url);
-          }
         },
         error: (error: HttpErrorResponse) => {
           console.error('❌ Request failed:', req.url, error);
-          if (error.status === 401) {
-            console.log('🔒 Unauthorized - Session may have expired');
-          }
         }
       })
     );

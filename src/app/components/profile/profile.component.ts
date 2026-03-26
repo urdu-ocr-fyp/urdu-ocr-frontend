@@ -17,6 +17,13 @@ export class ProfileComponent implements OnInit {
   user: any = null;
   subscription: any = null; // we might get subscription status from a dedicated endpoint
   showDeleteConfirm = false;
+  changePasswordForm: FormGroup;
+  changePasswordLoading = false;
+  changePasswordError = '';
+  changePasswordSuccess = '';
+  showOldPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +35,12 @@ export class ProfileComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]]
     });
+
+    this.changePasswordForm = this.fb.group({
+      oldPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validator: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
@@ -60,6 +73,7 @@ export class ProfileComponent implements OnInit {
 
     this.isLoading = true;
     const { name, email } = this.profileForm.value;
+
     this.profileService.updateProfile(name, email).subscribe({
       next: (response: any) => {
         this.isLoading = false;
@@ -136,6 +150,36 @@ export class ProfileComponent implements OnInit {
       error: (err: any) => {
         this.isLoading = false;
         this.errorMessage = err?.error?.message || 'Failed to cancel subscription.';
+        console.error(err);
+      }
+    });
+  }
+
+  passwordMatchValidator(g: FormGroup) {
+    return g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      ? null : { mismatch: true };
+  }
+  
+  onChangePassword(): void {
+    if (this.changePasswordForm.invalid) return;
+  
+    this.changePasswordLoading = true;
+    this.changePasswordError = '';
+    this.changePasswordSuccess = '';
+  
+    const { oldPassword, newPassword } = this.changePasswordForm.value;
+  
+    this.authService.changePassword(oldPassword, newPassword).subscribe({
+      next: (response: any) => {
+        this.changePasswordLoading = false;
+        this.changePasswordSuccess = response.message || 'Password changed successfully.';
+        this.changePasswordForm.reset();
+        setTimeout(() => this.changePasswordSuccess = '', 3000);
+      },
+      error: (err: any) => {
+        this.changePasswordLoading = false;
+        this.changePasswordError = err?.error?.message || 'Failed to change password.';
+        setTimeout(() => this.changePasswordError = '', 3000);
         console.error(err);
       }
     });
