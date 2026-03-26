@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
@@ -14,10 +14,18 @@ export class NavbarComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private eRef: ElementRef
   ) {}
 
   ngOnInit(): void {
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.isMenuOpen && !this.eRef.nativeElement.contains(event.target)) {
+      this.isMenuOpen = false;
+    }
   }
 
   get isLoggedIn(): boolean {
@@ -29,12 +37,14 @@ export class NavbarComponent {
   }
 
   login(): void {
+    console.log('here')
     setTimeout(() => {
       this.router.navigate(['/login'], { replaceUrl: true });
     }, 1500);
   }
 
-  toggleMenu(): void {
+  toggleMenu(event?: MouseEvent) {
+    if (event) event.stopPropagation();
     this.isMenuOpen = !this.isMenuOpen;
   }
 }
