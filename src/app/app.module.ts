@@ -15,6 +15,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
     FooterComponent,
     ProfileComponent,
     ForgotPasswordComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

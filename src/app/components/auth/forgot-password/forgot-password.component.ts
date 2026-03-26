@@ -1,3 +1,4 @@
+// forgot-password.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,25 +29,33 @@ export class ForgotPasswordComponent {
 
   onSubmit(): void {
     if (this.forgotForm.invalid) return;
-
+  
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-
+  
     const email = this.forgotForm.value.email;
-
+  
     this.authService.requestPasswordReset(email).subscribe({
       next: (response) => {
         this.isLoading = false;
-        console.log('resp', response)
-        this.successMessage = response.message || 'Password reset email sent. Check your inbox.';
-        // Optional: clear form
-        this.forgotForm.reset();
+        const token = response.resetToken;   
+        
+        if (token) {
+          sessionStorage.setItem('resetToken', token);
+          sessionStorage.setItem('resetTokenExpiry', (Date.now() + 15 * 60 * 1000).toString());
+          this.router.navigate(['/reset-password']);
+          this.successMessage = 'Reset token generated. Redirecting to reset page...';
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 1500);
+        } else {
+          this.errorMessage = 'No reset token received. Please try again.';
+        }
       },
       error: (err) => {
         this.isLoading = false;
-        console.log('error', err)
-        this.errorMessage = err?.error?.message || 'Failed to send reset email. Please try again.';
+        this.errorMessage = err?.error?.message || 'Failed to send reset request.';
         console.error(err);
       }
     });
