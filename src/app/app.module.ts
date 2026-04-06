@@ -16,6 +16,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { PricingComponent } from './components/pricing/pricing.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ResetPasswordComponent } from './components/auth/reset-password/reset-p
     ProfileComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    PricingComponent,
   ],
   imports: [
     BrowserModule,

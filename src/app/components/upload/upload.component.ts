@@ -1,6 +1,9 @@
+// components/upload/upload.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UploadService } from 'src/app/services//upload/upload.service';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-upload',
@@ -13,6 +16,8 @@ export class UploadComponent {
   selectedIndex: number = 0;
 
   isLoading: boolean = false;
+  uploadProgress: number = 0;
+  statusMessages: string[] = [];
   errorMessage: string = '';
   successMessage: string = '';
 
@@ -21,9 +26,12 @@ export class UploadComponent {
   private maxSizeMB = 10;
   private maxSizeBytes = this.maxSizeMB * 1024 * 1024;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private uploadService: UploadService,
+    private router: Router
+  ) {}
 
-  // ✅ Getter for the template – avoids calling .some() directly in the template
   get hasMultipleItemsWithPreview(): boolean {
     return this.selectedFiles.length > 1 && this.previewUrls.some(url => url !== null);
   }
@@ -59,19 +67,11 @@ export class UploadComponent {
     const pdfs = files.filter(f => f.type === this.allowedPdfType);
 
     if (pdfs.length > 0) {
-      if (files.length !== 1) {
-        return 'When uploading a PDF, you can only select that single file.';
-      }
-      if (pdfs.length !== 1) {
-        return 'Invalid PDF file.';
-      }
+      if (files.length !== 1) return 'When uploading a PDF, you can only select that single file.';
+      if (pdfs.length !== 1) return 'Invalid PDF file.';
     } else {
-      if (images.length !== files.length) {
-        return 'Only image files (JPG, PNG) are allowed when not uploading a PDF.';
-      }
-      if (images.length > 10) {
-        return 'You can upload at most 10 images.';
-      }
+      if (images.length !== files.length) return 'Only image files (JPG, PNG) are allowed when not uploading a PDF.';
+      if (images.length > 10) return 'You can upload at most 10 images.';
     }
     return null;
   }
@@ -103,6 +103,8 @@ export class UploadComponent {
     this.selectedFiles = [];
     this.previewUrls = [];
     this.selectedIndex = 0;
+    this.statusMessages = [];
+    this.uploadProgress = 0;
   }
 
   private clearPreviews(): void {
@@ -122,50 +124,87 @@ export class UploadComponent {
       this.errorMessage = 'No file selected.';
       return;
     }
-  
+
     this.isLoading = true;
+    this.uploadProgress = 0;
     this.errorMessage = '';
     this.successMessage = '';
-  
-    // Simulate API call
-    setTimeout(() => {
-      this.isLoading = false;
-  
-      // Generate mock extracted Urdu text
-      const mockExtractedText = this.generateMockUrduText(this.selectedFiles.length);
-  
-      // Prepare file data for passing (convert to serializable objects)
-      const filesData = this.selectedFiles.map((file, index) => ({
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        previewUrl: this.previewUrls[index] // already a data URL or object URL
-      }));
-  
-      // Navigate to results page with state
-      this.router.navigate(['/ocr-result'], {
-        state: {
-          files: filesData,
-          extractedText: mockExtractedText
+    this.statusMessages = [];
+
+    // Step 1: Upload files to /process
+    this.uploadService.uploadFiles(this.selectedFiles).subscribe({
+      next: (response) => {
+        console.log('response', response)
+
+        if (response.body && response.body.batchId) {
+          this.startListening(response.body.batchId);
         }
-      });
-  
-      // Clear current selection after navigation
-      this.clearAll();
-    }, 2000);
+      },
+      error: (err) => {
+        console.log('err', err);
+        this.errorMessage = err.error?.message || 'Upload failed. Please try again.';
+        this.isLoading = false;
+      }
+    });
   }
-  
-  // Helper to generate mock Urdu text
-  private generateMockUrduText(fileCount: number): string {
-    const texts = [
-      "اسلام آباد پاکستان کا دارالحکومت ہے۔ یہ شہر 1960 کی دہائی میں تعمیر کیا گیا تھا۔",
-      "پاکستان کے صوبے پنجاب، سندھ، خیبر پختونخوا اور بلوچستان ہیں۔",
-      "اردو پاکستان کی قومی زبان ہے اور یہ ہندوستان میں بھی بولی جاتی ہے۔",
-      "تحریر: \"علم حاصل کرو خواہ تمہیں چین جانا پڑے۔\"",
-      "یہ ایک نمونہ متن ہے جو آپ کی اپ لوڈ کردہ تصاویر سے نکالا گیا ہے۔"
-    ];
-    // Return a combination based on file count
-    return texts.slice(0, Math.min(fileCount, texts.length)).join('\n\n');
+
+  private startListening(batchId: string): void {
+  this.uploadService.listenToStatus(batchId).subscribe({
+    next: (data:any) => {
+      console.log('SSE data:', data);
+      this.statusMessages.push(`✅ Processing completed for batch ${data.batchId}`);
+      // After receiving completion, fetch the OCR result
+      this.fetchResult(batchId);
+    },
+    error: (err:any) => {
+      console.error('SSE error', err);
+      this.errorMessage = 'Lost connection to status updates.';
+      this.isLoading = false;
+    },
+    complete: () => {
+      // If the server closed the connection without sending data, still try to fetch result
+      if (this.isLoading) {
+        console.log('SSE connection closed, fetching result...');
+        this.fetchResult(batchId);
+      }
+    }
+  });
+}
+
+  private fetchResult(resultUrl: string): void {
+    // Use the same HttpClient with credentials
+    // this.uploadService.fetchResult(resultUrl).subscribe({
+    //   next: (result: any) => {
+    //     const extractedText = result.extractedText || result.text || 'No text extracted.';
+    //     this.navigateToResult(extractedText);
+    //   },
+    //   error: (err) => {
+    //     console.error(err);
+    //     this.errorMessage = 'Could not retrieve the OCR result.';
+    //     this.isLoading = false;
+    //   }
+    // });
+  }
+
+  private navigateToResult(extractedText: string): void {
+    // Prepare file data for the results page (optional)
+    const filesData = this.selectedFiles.map((file, index) => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      previewUrl: this.previewUrls[index]
+    }));
+
+    this.router.navigate(['/ocr-result'], {
+      state: {
+        files: filesData,
+        extractedText: extractedText
+      }
+    });
+
+    // Clear current selection after navigation
+    this.clearAll();
+    this.isLoading = false;
   }
 
   logout(): void {
