@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, RegisterPayload } from '../../../services/auth/auth.service'; // Import AuthService
+import { environment } from 'src/app/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ export class RegisterComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
   showPassword = false;
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private router: Router,
@@ -55,30 +57,30 @@ export class RegisterComponent implements OnInit {
 
     // Call AuthService to register the user with real-time API
     // signup.component.ts
-this.authService.register(payload).subscribe({
-  next: (response: any) => {
-    this.isLoading = false;
-    console.log('Signup response:', response);
+  this.authService.register(payload).subscribe({
+    next: (response: any) => {
+      this.isLoading = false;
+      console.log('Signup response:', response);
 
-    if (response) {
-      this.authService.setUserData(response?.user);
-    } else {
-      console.log('Response structure:', response);
+      if (response) {
+        this.authService.setUserData(response?.user);
+      } else {
+        console.log('Response structure:', response);
+      }
+
+      this.successMessage = 'Account created successfully! Redirecting to upload page...';
+
+      // Navigate directly to upload page
+      setTimeout(() => {
+        this.router.navigate(['/upload'], { replaceUrl: true });
+      }, 1500);
+    },
+    error: (err: any) => {
+      console.error('Signup error:', err);
+      this.isLoading = false;
+      this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
     }
-
-    this.successMessage = 'Account created successfully! Redirecting to upload page...';
-
-    // Navigate directly to upload page
-    setTimeout(() => {
-      this.router.navigate(['/upload'], { replaceUrl: true });
-    }, 1500);
-  },
-  error: (err: any) => {
-    console.error('Signup error:', err);
-    this.isLoading = false;
-    this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
-  }
-});
+  });
   }
 
   // Navigate to login
@@ -102,13 +104,7 @@ this.authService.register(payload).subscribe({
 
   onGoogleRegister(): void {
     this.isLoading = true;
-    console.log('Google registration initiated');
-
-    // Simulate Google OAuth
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/dashboard']);
-    }, 1500);
+    window.location.href = `${environment.apiUrl}/auth/google`;
   }
 
   getPasswordStrength(): string {

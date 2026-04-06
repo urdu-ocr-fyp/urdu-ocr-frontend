@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService, LoginPayload } from 'src/app/services/auth/auth.service';
+import { environment } from 'src/app/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -71,16 +72,9 @@ export class LoginComponent implements OnInit {
   }
 
   // Handle Google login
-  onGoogleLogin(): void {
-    // this.isLoading = true;
-    // console.log('Google login initiated');
-
-    // // Simulate Google OAuth – just set logged in and redirect
-    // setTimeout(() => {
-    //   this.isLoading = false;
-    //   this.authService.setLoggedIn(true);
-    //   this.router.navigate(['/upload']);
-    // }, 1500);
+  onGoogleLogin(): void { 
+      this.isLoading = true;
+      window.location.href = `${environment.apiUrl}/auth/google`;
   }
 
   // Handle GitHub login
