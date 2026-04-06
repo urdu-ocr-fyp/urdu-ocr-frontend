@@ -1,9 +1,9 @@
-// auth.guard.ts
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth/auth.service';
-
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,25 +11,33 @@ import { AuthService } from '../services/auth/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    
-    // Check if user is authenticated
+  ): Observable<boolean | UrlTree> {
+
+    // If already authenticated locally, let through immediately
     if (this.authService.isAuthenticated()) {
-      return true;
+      return of(true);
     }
-    
-    // Store the attempted URL for redirecting after login
-    this.router.navigate(['/login'], { 
-      queryParams: { returnUrl: state.url },
-      replaceUrl: false
-    });
-    
-    return false;
+
+    // Otherwise verify session with backend (handles Google OAuth / refresh)
+    return this.authService.getProfile().pipe(
+      map(res => {
+        this.authService.setUserData(res.user);
+        return true;
+      }),
+      catchError(() => {
+        this.router.navigate(['/login'], {
+          queryParams: { returnUrl: state.url },
+          replaceUrl: false
+        });
+        return of(false);
+      })
+    );
   }
 }

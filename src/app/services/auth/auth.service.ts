@@ -37,7 +37,7 @@ export class AuthService {
 
   // Get user profile (cookie automatically sent by browser)
   getProfile(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/user/me`);
+    return this.http.get(`${this.apiUrl}/user/me`, { withCredentials: true });
   }
 
   // Profile with userId (cookie automatically sent)
@@ -93,8 +93,12 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/reset-password`, { resetToken, newPassword });
   }
 
-  // profile.service.ts
-changePassword(oldPassword: string, newPassword: string): Observable<any> {
-  return this.http.post(`${this.apiUrl}/auth/change-password`, { oldPassword, newPassword });
-}
+    // profile.service.ts
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/change-password`, { oldPassword, newPassword });
+  }
+
+  getGoogleOAuthUrl(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/auth/google/url`);
+  }
 }

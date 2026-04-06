@@ -17,6 +17,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ForgotPasswordComponent } from './components/auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { PricingComponent } from './components/pricing/pricing.component';
+import { OauthSuccessComponent } from './components/auth/oauth-success/oauth-success.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { PricingComponent } from './components/pricing/pricing.component';
     ForgotPasswordComponent,
     ResetPasswordComponent,
     PricingComponent,
+    OauthSuccessComponent,
   ],
   imports: [
     BrowserModule,

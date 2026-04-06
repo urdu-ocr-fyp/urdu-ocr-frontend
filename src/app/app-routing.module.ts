@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
+import { OauthSuccessComponent } from './components/auth/oauth-success/oauth-success.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -29,6 +30,9 @@ const routes: Routes = [
   { path: 'ocr-result', component: OcrResultComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'pricing', component: PricingComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'oauth-success', component: OauthSuccessComponent },
 
   // Wildcard
   { path: '**', redirectTo: '' }
