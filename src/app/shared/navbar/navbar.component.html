@@ -1,17 +1,17 @@
-<nav class="relative z-50">
+<nav class="relative z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center py-6">
+    <div class="flex justify-between items-center py-5">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a routerLink="/" class="flex items-center">
-          <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-500 rounded-xl flex items-center justify-center">
+        <a routerLink="/" class="flex items-center group">
+          <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 dark:from-amber-400 dark:to-orange-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
               </path>
             </svg>
           </div>
-          <span class="ml-3 text-xl font-bold bg-gradient-to-r from-cyan-700 to-blue-700 dark:from-cyan-300 dark:to-blue-300 bg-clip-text text-transparent">
+          <span class="ml-3 text-xl font-bold bg-gradient-to-r from-amber-700 to-orange-700 dark:from-amber-300 dark:to-orange-300 bg-clip-text text-transparent">
             UrduScript OCR
           </span>
         </a>
@@ -21,18 +21,18 @@
       <div class="hidden md:flex items-center space-x-8">
         <div *ngIf="isLoggedIn" class="flex items-center space-x-6">
           <a routerLink="/upload"
-             routerLinkActive="border-b-2 border-cyan-600 dark:border-cyan-400 text-gray-900 dark:text-white"
-             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+             routerLinkActive="border-b-2 border-amber-600 dark:border-amber-400 text-gray-900 dark:text-white"
+             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-b-2 hover:border-amber-300 transition-all">
             Upload
           </a>
           <a routerLink="/history"
-             routerLinkActive="border-b-2 border-cyan-600 dark:border-cyan-400 text-gray-900 dark:text-white"
-             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+             routerLinkActive="border-b-2 border-amber-600 dark:border-amber-400 text-gray-900 dark:text-white"
+             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-b-2 hover:border-amber-300 transition-all">
             My Documents
           </a>
           <a routerLink="/profile"
-             routerLinkActive="border-b-2 border-cyan-600 dark:border-cyan-400 text-gray-900 dark:text-white"
-             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+             routerLinkActive="border-b-2 border-amber-600 dark:border-amber-400 text-gray-900 dark:text-white"
+             class="pb-1 font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-b-2 hover:border-amber-300 transition-all">
             Profile
           </a>
           <button (click)="logout()"
@@ -94,31 +94,30 @@
           <div class="flex flex-col py-2">
             <div *ngIf="isLoggedIn" class="authenticatedLinks flex flex-col">
               <a routerLink="/upload" (click)="toggleMenu()"
-                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition">
+                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition">
                 Upload
               </a>
               <a routerLink="/history" (click)="toggleMenu()"
-                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition">
+                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition">
                 My Documents
               </a>
               <a routerLink="/profile" (click)="toggleMenu()"
-                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition">
+                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition">
                 Profile
               </a>
               <div class="my-1 border-t border-gray-100 dark:border-gray-800"></div>
               <button *ngIf="isLoggedIn" (click)="logout(); toggleMenu()"
-                      class="text-left px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition cursor-pointer">
+                      class="text-left px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">
                 Logout
               </button>
             </div>
             <div *ngIf="!isLoggedIn" (click)="login(); toggleMenu()"
-                    class="text-left px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition cursor-pointer">
+                    class="text-left px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition cursor-pointer">
               Login
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </nav>
