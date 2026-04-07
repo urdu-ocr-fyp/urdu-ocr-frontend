@@ -6,7 +6,6 @@
     <div class="absolute bottom-40 -left-40 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl"></div>
   </div>
 
-
   <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12">
@@ -29,7 +28,7 @@
                class="border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl p-8 text-center
                       hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 cursor-pointer
                       group hover:scale-[1.02]"
-               (click)="fileInput.click()">
+               (click)="openFilePicker()">
             <svg class="w-20 h-20 mx-auto text-gray-400 dark:text-gray-500 mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition"
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -40,7 +39,6 @@
             <p class="text-gray-500 dark:text-gray-500 text-xs mt-4">
               Supports JPG, PNG, PDF • Max 10 MB each • 1 PDF or up to 10 images
             </p>
-            <input #fileInput type="file" accept="image/*,.pdf" multiple class="hidden" (change)="onFileSelected($event)">
           </div>
 
           <!-- Gallery View -->
@@ -136,6 +134,18 @@
                 </span>
               </button>
 
+              <!-- Add More Files Button -->
+              <button *ngIf="canAddMoreFiles()" 
+                      (click)="openAddMoreFilePicker()"
+                      class="px-6 py-3.5 bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10
+                             text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-300
+                             hover:border-amber-300 dark:hover:border-amber-500/30">
+                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add More Files
+              </button>
+
               <button (click)="clearAll()"
                       class="px-6 py-3.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10
                              text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-300
@@ -170,3 +180,7 @@
     </div>
   </main>
 </div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="mainFileInput" accept="image/*,.pdf" multiple style="display: none;" (change)="onFileSelected($event)">
+<input type="file" id="addMoreFileInput" accept="image/*,.pdf" multiple style="display: none;" (change)="onAddMoreFiles($event)">

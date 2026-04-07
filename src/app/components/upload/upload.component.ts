@@ -25,6 +25,7 @@ export class UploadComponent {
   private allowedPdfType = 'application/pdf';
   private maxSizeMB = 10;
   private maxSizeBytes = this.maxSizeMB * 1024 * 1024;
+  private maxFiles = 10;
 
   constructor(
     private authService: AuthService,
@@ -34,6 +35,29 @@ export class UploadComponent {
 
   get hasMultipleItemsWithPreview(): boolean {
     return this.selectedFiles.length > 1 && this.previewUrls.some(url => url !== null);
+  }
+
+  canAddMoreFiles(): boolean {
+    if (this.isLoading) return false;
+    const hasPdf = this.selectedFiles.some(f => f.type === this.allowedPdfType);
+    if (hasPdf) return false;
+    return this.selectedFiles.length < this.maxFiles;
+  }
+
+  openFilePicker(): void {
+    const input = document.getElementById('mainFileInput') as HTMLInputElement;
+    if (input) {
+      input.value = '';
+      input.click();
+    }
+  }
+
+  openAddMoreFilePicker(): void {
+    const input = document.getElementById('addMoreFileInput') as HTMLInputElement;
+    if (input) {
+      input.value = '';
+      input.click();
+    }
   }
 
   onFileSelected(event: Event): void {
@@ -56,6 +80,55 @@ export class UploadComponent {
     input.value = '';
   }
 
+  onAddMoreFiles(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const newFiles = Array.from(input.files);
+    
+    // Check if we already have a PDF
+    const hasPdf = this.selectedFiles.some(f => f.type === this.allowedPdfType);
+    if (hasPdf) {
+      this.errorMessage = 'Cannot add more files. PDF already selected (max 1 file).';
+      input.value = '';
+      return;
+    }
+
+    // Check total count limit
+    if (this.selectedFiles.length + newFiles.length > this.maxFiles) {
+      this.errorMessage = `Cannot add ${newFiles.length} file(s). You already have ${this.selectedFiles.length} file(s). Max ${this.maxFiles} files allowed.`;
+      input.value = '';
+      return;
+    }
+
+    // Validate each new file
+    for (const file of newFiles) {
+      if (file.size > this.maxSizeBytes) {
+        this.errorMessage = `File "${file.name}" exceeds ${this.maxSizeMB} MB.`;
+        input.value = '';
+        return;
+      }
+      if (!this.allowedImageTypes.includes(file.type)) {
+        this.errorMessage = `File "${file.name}" is not an allowed image type. Only JPG, PNG allowed when not uploading a PDF.`;
+        input.value = '';
+        return;
+      }
+    }
+
+    // Add new files
+    const allFiles = [...this.selectedFiles, ...newFiles];
+    this.selectedFiles = allFiles;
+    this.generatePreviews(this.selectedFiles);
+    
+    // Select the first newly added file
+    if (newFiles.length > 0) {
+      this.selectedIndex = this.selectedFiles.length - newFiles.length;
+    }
+    
+    this.errorMessage = '';
+    input.value = '';
+  }
+
   private validateFiles(files: File[]): string | null {
     for (const file of files) {
       if (file.size > this.maxSizeBytes) {
@@ -71,12 +144,13 @@ export class UploadComponent {
       if (pdfs.length !== 1) return 'Invalid PDF file.';
     } else {
       if (images.length !== files.length) return 'Only image files (JPG, PNG) are allowed when not uploading a PDF.';
-      if (images.length > 10) return 'You can upload at most 10 images.';
+      if (images.length > this.maxFiles) return `You can upload at most ${this.maxFiles} images.`;
     }
     return null;
   }
 
   private generatePreviews(files: File[]): void {
+    this.clearPreviews();
     this.previewUrls = files.map(file => {
       if (this.allowedImageTypes.includes(file.type)) {
         return URL.createObjectURL(file);
@@ -131,17 +205,14 @@ export class UploadComponent {
     this.successMessage = '';
     this.statusMessages = [];
 
-    // Step 1: Upload files to /process
     this.uploadService.uploadFiles(this.selectedFiles).subscribe({
       next: (response) => {
-        console.log('response', response)
-
         if (response.body && response.body.batchId) {
           this.startListening(response.body.batchId);
         }
       },
       error: (err) => {
-        console.log('err', err);
+        console.error(err);
         this.errorMessage = err.error?.message || 'Upload failed. Please try again.';
         this.isLoading = false;
       }
@@ -149,45 +220,32 @@ export class UploadComponent {
   }
 
   private startListening(batchId: string): void {
-  this.uploadService.listenToStatus(batchId).subscribe({
-    next: (data:any) => {
-      console.log('SSE data:', data);
-      this.statusMessages.push(`✅ Processing completed for batch ${data.batchId}`);
-      // After receiving completion, fetch the OCR result
-      this.fetchResult(batchId);
-    },
-    error: (err:any) => {
-      console.error('SSE error', err);
-      this.errorMessage = 'Lost connection to status updates.';
-      this.isLoading = false;
-    },
-    complete: () => {
-      // If the server closed the connection without sending data, still try to fetch result
-      if (this.isLoading) {
-        console.log('SSE connection closed, fetching result...');
+    this.uploadService.listenToStatus(batchId).subscribe({
+      next: (data: any) => {
+        console.log('SSE data:', data);
+        this.statusMessages.push(`✅ Processing completed for batch ${data.batchId}`);
         this.fetchResult(batchId);
+      },
+      error: (err: any) => {
+        console.error('SSE error', err);
+        this.errorMessage = 'Lost connection to status updates.';
+        this.isLoading = false;
+      },
+      complete: () => {
+        if (this.isLoading) {
+          console.log('SSE connection closed, fetching result...');
+          this.fetchResult(batchId);
+        }
       }
-    }
-  });
-}
+    });
+  }
 
-  private fetchResult(resultUrl: string): void {
-    // Use the same HttpClient with credentials
-    // this.uploadService.fetchResult(resultUrl).subscribe({
-    //   next: (result: any) => {
-    //     const extractedText = result.extractedText || result.text || 'No text extracted.';
-    //     this.navigateToResult(extractedText);
-    //   },
-    //   error: (err) => {
-    //     console.error(err);
-    //     this.errorMessage = 'Could not retrieve the OCR result.';
-    //     this.isLoading = false;
-    //   }
-    // });
+  private fetchResult(batchId: string): void {
+    // Replace with actual result fetching logic
+    this.navigateToResult('Extracted Urdu text will appear here...');
   }
 
   private navigateToResult(extractedText: string): void {
-    // Prepare file data for the results page (optional)
     const filesData = this.selectedFiles.map((file, index) => ({
       name: file.name,
       size: file.size,
@@ -202,7 +260,6 @@ export class UploadComponent {
       }
     });
 
-    // Clear current selection after navigation
     this.clearAll();
     this.isLoading = false;
   }
