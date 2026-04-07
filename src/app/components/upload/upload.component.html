@@ -1,16 +1,16 @@
-<div class="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-slate-900 dark:to-gray-950 overflow-hidden">
-  <!-- Background decorations - keep the same -->
+<div class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-white dark:from-gray-900 dark:via-slate-900 dark:to-gray-950 overflow-hidden">
+  <!-- Background decorations - warm colors -->
   <div class="absolute inset-0 overflow-hidden">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute top-1/3 left-10 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 left-10 w-60 h-60 bg-orange-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-40 -left-40 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl"></div>
   </div>
 
 
   <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12">
-        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-700 via-blue-700 to-gray-700 dark:from-cyan-300 dark:via-blue-300 dark:to-white bg-clip-text text-transparent">
+        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-700 via-orange-600 to-rose-700 dark:from-amber-300 dark:via-orange-300 dark:to-rose-300 bg-clip-text text-transparent">
           Upload Your Urdu Document
         </h1>
         <p class="text-gray-600 dark:text-gray-400 mt-3 text-lg">
@@ -19,24 +19,24 @@
       </div>
 
       <!-- Upload card -->
-      <div class="relative backdrop-blur-xl bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-3xl shadow-2xl">
-        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-blue-500/10 rounded-3xl"></div>
-        <div class="h-2 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 dark:from-cyan-400 dark:via-blue-400 dark:to-purple-400 rounded-t-3xl"></div>
+      <div class="relative backdrop-blur-xl bg-white/70 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-3xl shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/10 rounded-3xl"></div>
+        <div class="h-2 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 dark:from-amber-400 dark:via-orange-400 dark:to-rose-400 rounded-t-3xl"></div>
 
         <div class="p-6 md:p-8 relative z-10">
           <!-- Dropzone -->
           <div *ngIf="selectedFiles.length === 0"
                class="border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl p-8 text-center
-                      hover:border-cyan-500 dark:hover:border-cyan-400 transition-all duration-300 cursor-pointer
+                      hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 cursor-pointer
                       group hover:scale-[1.02]"
                (click)="fileInput.click()">
-            <svg class="w-20 h-20 mx-auto text-gray-400 dark:text-gray-500 mb-4 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition"
+            <svg class="w-20 h-20 mx-auto text-gray-400 dark:text-gray-500 mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition"
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
             <p class="text-gray-700 dark:text-gray-300 text-lg mb-2 font-medium">Drag and drop your files here</p>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">or <span class="text-cyan-600 dark:text-cyan-400 group-hover:underline">click to browse</span></p>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">or <span class="text-amber-600 dark:text-amber-400 group-hover:underline">click to browse</span></p>
             <p class="text-gray-500 dark:text-gray-500 text-xs mt-4">
               Supports JPG, PNG, PDF • Max 10 MB each • 1 PDF or up to 10 images
             </p>
@@ -46,12 +46,12 @@
           <!-- Gallery View -->
           <div *ngIf="selectedFiles.length > 0" class="space-y-6">
             <!-- Main preview -->
-            <div class="bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-800/50 dark:to-slate-900/50 rounded-2xl p-4 border border-gray-300 dark:border-white/10 shadow-xl">
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-slate-900/50 rounded-2xl p-4 border border-gray-200 dark:border-white/10 shadow-xl">
               <div *ngIf="previewUrls[selectedIndex] as imgUrl">
                 <img [src]="imgUrl" alt="Preview" class="max-h-96 mx-auto rounded-lg object-contain">
               </div>
               <div *ngIf="!previewUrls[selectedIndex]" class="flex flex-col items-center justify-center py-8">
-                <svg class="w-20 h-20 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-20 h-20 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                 </svg>
@@ -66,13 +66,13 @@
               <div *ngFor="let file of selectedFiles; let i = index"
                    (click)="selectFile(i)"
                    class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-200"
-                   [class.border-cyan-600]="i === selectedIndex"
-                   [class.dark:border-cyan-400]="i === selectedIndex"
+                   [class.border-amber-600]="i === selectedIndex"
+                   [class.dark:border-amber-400]="i === selectedIndex"
                    [class.border-transparent]="i !== selectedIndex"
                    [class.opacity-50]="i !== selectedIndex">
                 <img *ngIf="previewUrls[i]" [src]="previewUrls[i]" class="w-full h-full object-cover">
-                <div *ngIf="!previewUrls[i]" class="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-                  <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div *ngIf="!previewUrls[i]" class="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                  <svg class="w-8 h-8 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                   </svg>
                 </div>
@@ -82,9 +82,9 @@
             <!-- File list with individual delete buttons -->
             <div class="space-y-2 max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600">
               <div *ngFor="let file of selectedFiles; let i = index"
-                   class="flex items-center justify-between p-3 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/10 transition">
+                   class="flex items-center justify-between p-3 bg-white dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 transition">
                 <div class="flex items-center space-x-3 text-sm truncate">
-                  <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
@@ -92,7 +92,7 @@
                   <span class="text-gray-500 dark:text-gray-500 text-xs">({{ (file.size / 1024).toFixed(0) }} KB)</span>
                 </div>
                 <button (click)="removeFile(i)"
-                        class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-1 rounded-full hover:bg-red-500/10">
+                        class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 transition p-1 rounded-full hover:bg-rose-500/10">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -101,24 +101,24 @@
               </div>
             </div>
 
-            <!-- After the file list, before action buttons -->
-<div *ngIf="isLoading" class="space-y-2 mt-4">
-  <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-    <div class="bg-cyan-600 h-2 transition-all duration-300" [style.width.%]="uploadProgress"></div>
-  </div>
-  <div *ngFor="let msg of statusMessages" class="text-sm text-gray-600 dark:text-gray-400">
-    {{ msg }}
-  </div>
-</div>
+            <!-- Progress and status messages -->
+            <div *ngIf="isLoading" class="space-y-2 mt-4">
+              <div class="bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 transition-all duration-300" [style.width.%]="uploadProgress"></div>
+              </div>
+              <div *ngFor="let msg of statusMessages" class="text-sm text-gray-600 dark:text-gray-400">
+                {{ msg }}
+              </div>
+            </div>
 
             <!-- Action buttons -->
             <div class="flex flex-col sm:flex-row gap-3">
               <button (click)="processImage()" [disabled]="isLoading"
-                      class="flex-1 relative bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500
+                      class="flex-1 relative bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-500 dark:to-orange-500
                              text-white font-semibold py-3.5 rounded-xl
-                             shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40
+                             shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40
                              hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed
-                             disabled:hover:scale-100 disabled:hover:shadow-cyan-500/25
+                             disabled:hover:scale-100 disabled:hover:shadow-amber-500/25
                              transition-all duration-300">
                 <span *ngIf="!isLoading" class="flex items-center justify-center gap-2">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,9 +137,9 @@
               </button>
 
               <button (click)="clearAll()"
-                      class="px-6 py-3.5 bg-gray-200 hover:bg-gray-300 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-300 dark:border-white/10
+                      class="px-6 py-3.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10
                              text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-300
-                             hover:border-gray-400 dark:hover:border-white/20">
+                             hover:border-gray-300 dark:hover:border-white/20">
                 Clear All
               </button>
             </div>
@@ -147,7 +147,7 @@
 
           <!-- Error & success messages -->
           <div *ngIf="errorMessage"
-               class="mt-4 p-3 bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20 rounded-lg text-red-700 dark:text-red-400 text-sm
+               class="mt-4 p-3 bg-rose-100 dark:bg-rose-500/10 border border-rose-300 dark:border-rose-500/20 rounded-lg text-rose-700 dark:text-rose-400 text-sm
                       flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -156,7 +156,7 @@
             {{ errorMessage }}
           </div>
           <div *ngIf="successMessage"
-               class="mt-4 p-3 bg-green-100 dark:bg-green-500/10 border border-green-300 dark:border-green-500/20 rounded-lg text-green-700 dark:text-green-400 text-sm
+               class="mt-4 p-3 bg-emerald-100 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/20 rounded-lg text-emerald-700 dark:text-emerald-400 text-sm
                       flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -165,9 +165,8 @@
           </div>
         </div>
 
-        <div class="h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400 opacity-50 rounded-b-3xl"></div>
+        <div class="h-1 bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 dark:from-rose-400 dark:via-orange-400 dark:to-amber-400 opacity-50 rounded-b-3xl"></div>
       </div>
     </div>
   </main>
-
 </div>

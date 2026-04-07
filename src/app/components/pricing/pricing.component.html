@@ -1,6 +1,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
   <div class="text-center mb-12">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Choose Your Plan</h2>
+    <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-700 via-orange-600 to-rose-700 dark:from-amber-300 dark:via-orange-300 dark:to-rose-300 bg-clip-text text-transparent mb-4">
+      Choose Your Plan
+    </h2>
     <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
       Start with our free tier or upgrade for more pages and features
     </p>
@@ -8,8 +10,8 @@
 
   <div class="grid md:grid-cols-3 gap-8">
     <!-- Free Tier -->
-    <div class="relative bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:border-cyan-500/50 transition-all duration-300">
-      <div class="absolute top-0 right-0 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">FREE</div>
+    <div class="relative bg-white/70 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:border-amber-300 dark:hover:border-amber-500/30 transition-all duration-300 hover:shadow-lg">
+      <div class="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">FREE</div>
       <div class="mt-4">
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Free Tier</h3>
         <div class="mt-4 flex items-baseline">
@@ -18,18 +20,18 @@
         </div>
         <p class="mt-4 text-gray-600 dark:text-gray-400">Perfect for getting started</p>
         <ul class="mt-6 space-y-3">
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>50 pages / month</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Urdu OCR</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>English translation</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Export to TXT/PDF</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>50 pages / month</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Urdu handwriting recognition</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Editable Urdu text output</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Export to TXT/PDF</li>
         </ul>
-        <button (click)="goToFree()" class="mt-8 w-full bg-gray-200 hover:bg-gray-300 dark:bg-white/10 dark:hover:bg-white/15 text-gray-700 dark:text-white font-semibold py-3 rounded-xl transition">Get Started</button>
+        <button (click)="goToFree()" class="mt-8 w-full bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/15 text-gray-700 dark:text-white font-semibold py-3 rounded-xl transition-all duration-200 hover:border-amber-300 dark:hover:border-amber-500/30 border border-transparent hover:shadow-sm">Get Started</button>
       </div>
     </div>
 
     <!-- Pro Tier -->
-    <div class="relative bg-gray-100/70 dark:bg-white/5 border-2 border-cyan-500/50 rounded-2xl p-8 backdrop-blur-sm shadow-xl scale-105 z-10">
-      <div class="absolute top-0 right-0 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">MOST POPULAR</div>
+    <div class="relative bg-white/70 dark:bg-white/5 border-2 border-amber-500/50 dark:border-amber-400/50 rounded-2xl p-8 backdrop-blur-sm shadow-xl scale-105 z-10">
+      <div class="absolute top-0 right-0 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-xs font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">MOST POPULAR</div>
       <div class="mt-4">
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Pro</h3>
         <div class="mt-4 flex items-baseline">
@@ -38,17 +40,17 @@
         </div>
         <p class="mt-4 text-gray-600 dark:text-gray-400">For professionals and small teams</p>
         <ul class="mt-6 space-y-3">
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Unlimited pages</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Priority support</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Batch processing</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Advanced export (Word, HTML)</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Unlimited pages</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Priority support</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Batch processing</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Advanced export (Word, HTML)</li>
         </ul>
-        <button (click)="subscribe('pro')" [disabled]="isLoading" class="mt-8 w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold py-3 rounded-xl transition hover:opacity-90 disabled:opacity-50">Subscribe Now</button>
+        <button (click)="subscribe('pro')" [disabled]="isLoading" class="mt-8 w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold py-3 rounded-xl transition-all duration-200 hover:opacity-90 hover:shadow-md disabled:opacity-50">Subscribe Now</button>
       </div>
     </div>
 
     <!-- Enterprise Tier -->
-    <div class="relative bg-gray-100/70 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-300">
+    <div class="relative bg-white/70 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-2xl p-8 backdrop-blur-sm hover:border-rose-300 dark:hover:border-rose-500/30 transition-all duration-300 hover:shadow-lg">
       <div class="mt-4">
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Enterprise</h3>
         <div class="mt-4 flex items-baseline">
@@ -57,14 +59,14 @@
         </div>
         <p class="mt-4 text-gray-600 dark:text-gray-400">For large organizations</p>
         <ul class="mt-6 space-y-3">
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Everything in Pro</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>API access</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Dedicated support</li>
-          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Custom integrations</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Everything in Pro</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>API access</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Dedicated support</li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300"><svg class="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Custom integrations</li>
         </ul>
-        <button (click)="subscribe('enterprise')" [disabled]="isLoading" class="mt-8 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 rounded-xl transition hover:opacity-90 disabled:opacity-50">Contact Sales</button>
+        <button (click)="subscribe('enterprise')" [disabled]="isLoading" class="mt-8 w-full bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold py-3 rounded-xl transition-all duration-200 hover:opacity-90 hover:shadow-md disabled:opacity-50">Contact Sales</button>
       </div>
     </div>
   </div>
-  <div *ngIf="errorMessage" class="text-red-600 text-center mt-4">{{ errorMessage }}</div>
+  <div *ngIf="errorMessage" class="text-rose-600 dark:text-rose-400 text-center mt-4">{{ errorMessage }}</div>
 </div>
