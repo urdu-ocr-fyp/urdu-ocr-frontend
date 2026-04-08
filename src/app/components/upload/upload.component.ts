@@ -85,7 +85,7 @@ export class UploadComponent {
     if (!input.files || input.files.length === 0) return;
 
     const newFiles = Array.from(input.files);
-    
+
     // Check if we already have a PDF
     const hasPdf = this.selectedFiles.some(f => f.type === this.allowedPdfType);
     if (hasPdf) {
@@ -119,12 +119,12 @@ export class UploadComponent {
     const allFiles = [...this.selectedFiles, ...newFiles];
     this.selectedFiles = allFiles;
     this.generatePreviews(this.selectedFiles);
-    
+
     // Select the first newly added file
     if (newFiles.length > 0) {
       this.selectedIndex = this.selectedFiles.length - newFiles.length;
     }
-    
+
     this.errorMessage = '';
     input.value = '';
   }
@@ -220,26 +220,22 @@ export class UploadComponent {
   }
 
   private startListening(batchId: string): void {
-    this.uploadService.listenToStatus(batchId).subscribe({
-      next: (data: any) => {
-        console.log('SSE data:', data);
-        this.statusMessages.push(`✅ Processing completed for batch ${data.batchId}`);
-        this.fetchResult(batchId);
-      },
-      error: (err: any) => {
-        console.error('SSE error', err);
-        this.errorMessage = 'Lost connection to status updates.';
-        this.isLoading = false;
-      },
-      complete: () => {
-        if (this.isLoading) {
-          console.log('SSE connection closed, fetching result...');
-          this.fetchResult(batchId);
-        }
-      }
-    });
-  }
-
+  this.uploadService.listenToStatus(batchId).subscribe({
+    next: (data) => {
+      console.log('SSE data:', data);
+      this.statusMessages.push(`✅ Processing completed for batch ${data.batchId}`);
+      this.fetchResult(batchId);
+    },
+    error: (err) => {
+      console.error('SSE error', err);
+      this.errorMessage = 'Lost connection to status updates.';
+      this.isLoading = false;
+    },
+    complete: () => {
+      // Optionally handle stream end
+    }
+  });
+}
   private fetchResult(batchId: string): void {
     // Replace with actual result fetching logic
     this.navigateToResult('Extracted Urdu text will appear here...');

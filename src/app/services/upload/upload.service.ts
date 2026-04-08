@@ -67,6 +67,32 @@ export class UploadService {
   // }
 
   listenToStatus(batchId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/file/stream/${batchId}`);
-  }
+  return new Observable(observer => {
+    const url = `${this.apiUrl}/file/stream/${batchId}`;
+    const eventSource = new EventSource(url, { withCredentials: true });
+
+    eventSource.onmessage = (event) => {
+      try {
+        console.log("event", event)
+        const data = JSON.parse(event.data);
+        observer.next(data);
+        // You can decide when to complete based on your backend event
+        // For example, if data.status === 'completed' or data.batchId
+        if (data.status === 'completed' || data.batchId) {
+          observer.complete();
+          eventSource.close();
+        }
+      } catch (err) {
+        observer.error(err);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      observer.error(err);
+      eventSource.close();
+    };
+
+    return () => eventSource.close();
+  });
+}
 }
