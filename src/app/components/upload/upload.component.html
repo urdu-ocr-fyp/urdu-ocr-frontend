@@ -25,10 +25,19 @@
         <div class="p-6 md:p-8 relative z-10">
           <!-- Dropzone -->
           <div *ngIf="selectedFiles.length === 0"
-               class="border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl p-8 text-center
-                      hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 cursor-pointer
-                      group hover:scale-[1.02]"
-               (click)="openFilePicker()">
+                class="border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300"
+              [class.border-gray-300]="canUpload"
+              [class.dark:border-white]="canUpload"
+              [class.border-red-300]="!canUpload"
+              [class.dark:border-red-500]="!canUpload"
+              [class.cursor-pointer]="canUpload"
+              [class.cursor-not-allowed]="!canUpload"
+              [class.opacity-60]="!canUpload"
+              [class.hover:border-amber-500]="canUpload"
+              [class.dark:hover:border-amber-400]="canUpload"
+              [class.group]="canUpload"
+              [class.hover:scale-[1.02]]="canUpload"
+               (click)="canUpload && openFilePicker()">
             <svg class="w-20 h-20 mx-auto text-gray-400 dark:text-gray-500 mb-4 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition"
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -135,7 +144,7 @@
               </button>
 
               <!-- Add More Files Button -->
-              <button *ngIf="canAddMoreFiles()" 
+              <button *ngIf="canAddMoreFiles()"
                       (click)="openAddMoreFilePicker()"
                       class="px-6 py-3.5 bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10
                              text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-300
@@ -174,6 +183,24 @@
             {{ successMessage }}
           </div>
         </div>
+
+        <!-- Token Status Card -->
+<div class="mx-6 mb-6 p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-xl border border-amber-200 dark:border-amber-500/20">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+    <div>
+      <h3 class="font-semibold text-gray-900 dark:text-white">Your Uploads</h3>
+      <div class="flex gap-4 mt-1">
+        <span class="text-sm text-gray-600 dark:text-gray-400">Free: <span class="font-bold text-amber-600 dark:text-amber-400">{{ user?.freeTokens || 0 }}</span></span>
+        <span class="text-sm text-gray-600 dark:text-gray-400">Pro: <span class="font-bold text-amber-600 dark:text-amber-400">{{ user?.proTokens || 0 }}</span></span>
+        <span class="text-sm text-gray-600 dark:text-gray-400">Total: <span class="font-bold text-amber-600 dark:text-amber-400">{{ totalTokens }}</span></span>
+      </div>
+    </div>
+    <div *ngIf="totalTokens === 0" class="text-sm text-rose-600 dark:text-rose-400">
+      ⚠️ No uploads remaining. Free uploads renew in <span class="font-semibold">{{ timeUntilReset }}</span>.
+      <div class="underline ml-1 cursor-pointer">Upgrade to Pro</div> for more uploads.
+    </div>
+  </div>
+</div>
 
         <div class="h-1 bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 dark:from-rose-400 dark:via-orange-400 dark:to-amber-400 opacity-50 rounded-b-3xl"></div>
       </div>

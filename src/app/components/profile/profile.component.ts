@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile/profile.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { FileService } from 'src/app/services/file/file.service';
 
 @Component({
   selector: 'app-profile',
@@ -24,12 +25,19 @@ export class ProfileComponent implements OnInit {
   showOldPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
+  historyData: any[] = [];
+historyLoading = false;
+historyError = '';
+currentPage = 1;
+pageSize = 10;
+totalItems = 0;
 
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private fileService: FileService
   ) {
     this.profileForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -45,18 +53,21 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProfile();
+    this.getHistory();
   }
 
   loadProfile(): void {
     this.isLoading = true;
     this.profileService.getProfile().subscribe({
       next: (response: any) => {
+        console.log('response', response)
         this.isLoading = false;
         this.user = response.user;
         this.profileForm.patchValue({
           name: this.user.name,
           email: this.user.email
         });
+        this.authService.setUserData(this.user)
         // Optionally load subscription status here
         // this.loadSubscription();
       },
@@ -68,6 +79,43 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+
+  getHistory(): void {
+  this.historyLoading = true;
+  this.fileService.getHistory().subscribe({
+    next: (response) => {
+      this.historyLoading = false;
+      if (response?.data && Array.isArray(response.data)) {
+        this.historyData = response.data;
+        this.totalItems = this.historyData.length;
+        // Reset to first page on new data
+        this.currentPage = 1;
+      } else {
+        this.historyError = 'No history data available.';
+      }
+    },
+    error: (err) => {
+      this.historyLoading = false;
+      this.historyError = err.error?.message || 'Failed to load document history.';
+      console.error(err);
+    }
+  });
+}
+
+get paginatedHistory(): any[] {
+  const start = (this.currentPage - 1) * this.pageSize;
+  const end = start + this.pageSize;
+  return this.historyData.slice(start, end);
+}
+
+changePage(page: number): void {
+  if (page < 1 || page > Math.ceil(this.totalItems / this.pageSize)) return;
+  this.currentPage = page;
+}
+
+get totalPages(): number {
+  return Math.ceil(this.totalItems / this.pageSize);
+}
   onUpdate(): void {
     if (this.profileForm.invalid) return;
 
@@ -159,16 +207,16 @@ export class ProfileComponent implements OnInit {
     return g.get('newPassword')?.value === g.get('confirmPassword')?.value
       ? null : { mismatch: true };
   }
-  
+
   onChangePassword(): void {
     if (this.changePasswordForm.invalid) return;
-  
+
     this.changePasswordLoading = true;
     this.changePasswordError = '';
     this.changePasswordSuccess = '';
-  
+
     const { oldPassword, newPassword } = this.changePasswordForm.value;
-  
+
     this.authService.changePassword(oldPassword, newPassword).subscribe({
       next: (response: any) => {
         this.changePasswordLoading = false;
@@ -184,4 +232,12 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
+  goToPricing(): void {
+  // Option 1: Navigate to dedicated pricing route (if exists)
+  this.router.navigate(['/pricing']);
+
+  // Option 2: Navigate to landing page and scroll to pricing section
+  // this.router.navigate(['/'], { fragment: 'pricing' });
+}
 }

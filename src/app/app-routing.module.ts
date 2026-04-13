@@ -27,7 +27,7 @@ const routes: Routes = [
 
   // Protected routes (require authentication)
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
-  { path: 'ocr-result', component: OcrResultComponent, canActivate: [AuthGuard] },
+  { path: 'ocr-result/:batchId', component: OcrResultComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'pricing', component: PricingComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

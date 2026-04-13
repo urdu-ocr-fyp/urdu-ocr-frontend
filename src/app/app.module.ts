@@ -18,6 +18,7 @@ import { ForgotPasswordComponent } from './components/auth/forgot-password/forgo
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { OauthSuccessComponent } from './components/auth/oauth-success/oauth-success.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { OauthSuccessComponent } from './components/auth/oauth-success/oauth-suc
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

@@ -25,11 +25,6 @@
              class="font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-b-2 hover:border-amber-300 transition-all">
             Upload
           </a>
-          <a routerLink="/history"
-             routerLinkActive="border-b-2 border-amber-600 dark:border-amber-400 text-gray-900 dark:text-white"
-             class="font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-b-2 hover:border-amber-300 transition-all">
-            My Documents
-          </a>
           <a routerLink="/profile"
              routerLinkActive="border-b-2 border-amber-600 dark:border-amber-400 text-gray-900 dark:text-white"
              class="font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:border-b-2 hover:border-amber-300 transition-all">
@@ -40,15 +35,15 @@
             Logout
           </button>
         </div>
-      
+
         <button *ngIf="!isLoggedIn" (click)="login()"
                 class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition font-medium cursor-pointer">
           Login
         </button>
-      
+
         <!-- Divider -->
         <div *ngIf="isLoggedIn" class="h-5 w-px bg-gray-200 dark:bg-gray-700"></div>
-      
+
         <!-- Theme toggle -->
         <button (click)="themeService.toggleTheme()"
                 class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
@@ -96,10 +91,6 @@
               <a routerLink="/upload" (click)="toggleMenu()"
                  class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition">
                 Upload
-              </a>
-              <a routerLink="/history" (click)="toggleMenu()"
-                 class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition">
-                My Documents
               </a>
               <a routerLink="/profile" (click)="toggleMenu()"
                  class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-amber-600 dark:hover:text-amber-400 transition">

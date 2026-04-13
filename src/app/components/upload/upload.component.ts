@@ -2,13 +2,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ProfileService } from 'src/app/services/profile/profile.service';
 import { UploadService } from 'src/app/services//upload/upload.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css']
+  styleUrls: ['./upload.component.css'],
+
 })
 export class UploadComponent {
   selectedFiles: File[] = [];
@@ -20,6 +22,7 @@ export class UploadComponent {
   statusMessages: string[] = [];
   errorMessage: string = '';
   successMessage: string = '';
+  user: any = null;
 
   private allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   private allowedPdfType = 'application/pdf';
@@ -29,9 +32,26 @@ export class UploadComponent {
 
   constructor(
     private authService: AuthService,
+    private profileService: ProfileService,
     private uploadService: UploadService,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.profileService.getProfile().subscribe({
+      next: (response: any) => {
+        console.log('response', response)
+        this.isLoading = false;
+        this.user = response.user;
+        this.authService.setUserData(this.user);
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message || 'Failed to load profile.';
+        console.error(err);
+      }
+    });
+  }
 
   get hasMultipleItemsWithPreview(): boolean {
     return this.selectedFiles.length > 1 && this.previewUrls.some(url => url !== null);
@@ -45,6 +65,10 @@ export class UploadComponent {
   }
 
   openFilePicker(): void {
+    if (!this.canUpload) {
+      this.errorMessage = `You have no tokens left. Free tokens renew in ${this.timeUntilReset}. Upgrade to Pro for more uploads.`;
+      return;
+    }
     const input = document.getElementById('mainFileInput') as HTMLInputElement;
     if (input) {
       input.value = '';
@@ -53,6 +77,10 @@ export class UploadComponent {
   }
 
   openAddMoreFilePicker(): void {
+     if (!this.canUpload) {
+      this.errorMessage = `You have no tokens left. Free tokens renew in ${this.timeUntilReset}. Upgrade to Pro for more uploads.`;
+      return;
+    }
     const input = document.getElementById('addMoreFileInput') as HTMLInputElement;
     if (input) {
       input.value = '';
@@ -61,6 +89,10 @@ export class UploadComponent {
   }
 
   onFileSelected(event: Event): void {
+    if (!this.canUpload) {
+      this.errorMessage = `You have no tokens left. Free tokens renew in ${this.timeUntilReset}. Upgrade to Pro for more uploads.`;
+      return;
+    }
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
@@ -81,6 +113,10 @@ export class UploadComponent {
   }
 
   onAddMoreFiles(event: Event): void {
+    if (!this.canUpload) {
+        this.errorMessage = `You have no tokens left. Free tokens renew in ${this.timeUntilReset}. Upgrade to Pro for more uploads.`;
+        return;
+      }
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
 
@@ -199,6 +235,11 @@ export class UploadComponent {
       return;
     }
 
+    if (!this.canUpload) {
+      this.errorMessage = `You have no tokens left. Free tokens will renew in ${this.timeUntilReset}. Please upgrade to Pro for more pages.`;
+      return;
+    }
+
     this.isLoading = true;
     this.uploadProgress = 0;
     this.errorMessage = '';
@@ -238,23 +279,18 @@ export class UploadComponent {
 }
   private fetchResult(batchId: string): void {
     // Replace with actual result fetching logic
-    this.navigateToResult('Extracted Urdu text will appear here...');
+    this.navigateToResult(batchId);
   }
 
-  private navigateToResult(extractedText: string): void {
-    const filesData = this.selectedFiles.map((file, index) => ({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      previewUrl: this.previewUrls[index]
-    }));
+  private navigateToResult(batchId: string): void {
+    // const filesData = this.selectedFiles.map((file, index) => ({
+    //   name: file.name,
+    //   size: file.size,
+    //   type: file.type,
+    //   previewUrl: this.previewUrls[index]
+    // }));
 
-    this.router.navigate(['/ocr-result'], {
-      state: {
-        files: filesData,
-        extractedText: extractedText
-      }
-    });
+    this.router.navigate(['/ocr-result', batchId]);
 
     this.clearAll();
     this.isLoading = false;
@@ -262,5 +298,35 @@ export class UploadComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  get totalTokens(): number {
+    return (this.user?.freeTokens || 0) + (this.user?.proTokens || 0);
+  }
+
+  get canUpload(): boolean {
+    return this.totalTokens > 0;
+  }
+
+  get nextResetTime(): Date | null {
+    if (!this.user?.lastDailyReset) return null;
+    const lastReset = new Date(this.user.lastDailyReset);
+    const nextReset = new Date(lastReset.getTime() + 24 * 60 * 60 * 1000);
+    return nextReset;
+  }
+
+  get timeUntilReset(): string {
+    const next = this.nextResetTime;
+    if (!next) return 'Unknown';
+    const now = new Date();
+    const diff = next.getTime() - now.getTime();
+    if (diff <= 0) return 'Soon';
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (3600000)) / (1000 * 60));
+    return `${hours}h ${minutes}m`;
+  }
+
+  goToPricing() {
+    this.router.navigate(['/pricing']);
   }
 }

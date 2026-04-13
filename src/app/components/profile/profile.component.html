@@ -97,7 +97,6 @@
         <div class="p-6 md:p-8">
           <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Change Password</h2>
 
-          <!-- Password change messages -->
           <div *ngIf="changePasswordError" class="mb-4 p-3 bg-rose-100 dark:bg-rose-500/10 border border-rose-300 dark:border-rose-500/20 rounded-lg text-rose-700 dark:text-rose-400 text-sm">
             {{ changePasswordError }}
           </div>
@@ -209,33 +208,101 @@
       <div class="mt-8 relative backdrop-blur-xl bg-white/70 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 rounded-t-3xl"></div>
         <div class="p-6 md:p-8">
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Subscription Plan</h2>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Your Plan</h2>
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
               <p class="text-gray-600 dark:text-gray-400">
                 You are currently on the <span class="font-semibold text-amber-600 dark:text-amber-400">Free Plan</span>.
-                Upgrade to Pro for unlimited OCR pages and priority support.
+                Upgrade to Pro or Enterprise for more pages, priority support, and advanced features.
               </p>
-              <div class="mt-4 flex gap-4">
-                <button (click)="subscribe('pro')" [disabled]="isLoading"
-                  class="px-6 py-2 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all disabled:opacity-50">
-                  Upgrade to Pro
-                </button>
-                <button (click)="cancelSubscription()" [disabled]="isLoading"
-                  class="px-6 py-2 border border-gray-200 dark:border-white/20 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/10 transition disabled:opacity-50">
-                  Cancel Subscription
+              <div class="mt-4">
+                <button (click)="goToPricing()"
+                        class="px-6 py-2 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all">
+                  View Plans
                 </button>
               </div>
             </div>
             <div class="bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-500/20 dark:to-orange-500/20 p-4 rounded-xl">
               <p class="text-sm text-gray-700 dark:text-gray-300">
-                <span class="font-bold text-lg">$9.99</span> / month
+                <span class="font-bold text-lg">Free</span> – 50 pages/month
               </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Cancel anytime</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Upgrade anytime</p>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Document History Section -->
+      <div class="mt-8 relative backdrop-blur-xl bg-white/70 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 rounded-t-3xl"></div>
+        <div class="p-6 md:p-8">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Document History</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">Your previous OCR upload batches</p>
+
+          <!-- Loading -->
+          <div *ngIf="historyLoading" class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-amber-600"></div>
+            <p class="mt-2 text-gray-500 dark:text-gray-400">Loading history...</p>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="historyError" class="text-center py-8">
+            <p class="text-rose-600 dark:text-rose-400">{{ historyError }}</p>
+          </div>
+
+          <!-- Table -->
+          <div *ngIf="!historyLoading && !historyError && historyData.length > 0" class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+              <thead class="text-xs uppercase bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10">
+                <tr>
+                  <th class="px-4 py-3 rounded-tl-lg">Date</th>
+                  <th class="px-4 py-3">Batch ID</th>
+                  <th class="px-4 py-3">Files</th>
+                  <th class="px-4 py-3 rounded-tr-lg">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of paginatedHistory" class="border-b border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition">
+                  <td class="px-4 py-3 whitespace-nowrap">{{ item.createdAt | date:'MMM d, y, h:mm a' }}</td>
+                  <td class="px-4 py-3 font-mono text-xs">{{ item.batchId | slice:0:8 }}...</td>
+                  <td class="px-4 py-3">{{ item.files.length }} file(s)</td>
+                  <td class="px-4 py-3">
+                    <span [class]="item.isFetched === 'Not fetched (files still available for download)'
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-gray-500 dark:text-gray-400'">
+                      {{ item.isFetched === 'Not fetched (files still available for download)' ? '✅ Available' : '📦 Retrieved' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-6 pt-4 border-t border-gray-200 dark:border-white/10">
+              <button (click)="changePage(currentPage - 1)"
+                      [disabled]="currentPage === 1"
+                      class="px-4 py-2 text-sm text-white dark:text-black bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition">
+                Previous
+              </button>
+              <span class="text-sm text-gray-600 dark:text-gray-400">
+                Page {{ currentPage }} of {{ totalPages }}
+              </span>
+              <button (click)="changePage(currentPage + 1)"
+                      [disabled]="currentPage === totalPages"
+                      class="px-4 py-2 text-sm  text-white dark:text-black bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition">
+                Next
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div *ngIf="!historyLoading && !historyError && historyData.length === 0" class="text-center py-8">
+            <p class="text-gray-500 dark:text-gray-400">No upload history found.</p>
+            <a routerLink="/upload" class="inline-block mt-4 text-amber-600 hover:text-amber-700 dark:text-amber-400">Start your first upload →</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 </div>
