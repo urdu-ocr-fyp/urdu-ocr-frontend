@@ -66,8 +66,9 @@ export class OcrResultComponent implements OnInit {
     this.fileService.fetchResult(this.batchId!).subscribe({
       next: (response) => {
         this.isLoading = false;
-        if (response && response.data && Array.isArray(response.data)) {
-          this.files = response.data.map((item: any) => {
+        console.log('resp', response)
+
+          this.files = response?.data?.results?.map((item: any) => {
             let extractedTextPlain = '';
             if (item.extractedText) {
               try {
@@ -87,9 +88,6 @@ export class OcrResultComponent implements OnInit {
           if (this.files.length > 0) {
             this.selectedFileIndex = 0;
           }
-        } else {
-          this.errorMessage = 'Invalid response format from server.';
-        }
       },
       error: (err) => {
         this.isLoading = false;
