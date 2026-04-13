@@ -85,6 +85,8 @@ totalItems = 0;
   this.fileService.getHistory().subscribe({
     next: (response) => {
       this.historyLoading = false;
+
+      console.log('hitory', response)
       if (response?.data && Array.isArray(response.data)) {
         this.historyData = response.data;
         this.totalItems = this.historyData.length;
@@ -239,5 +241,10 @@ get totalPages(): number {
 
   // Option 2: Navigate to landing page and scroll to pricing section
   // this.router.navigate(['/'], { fragment: 'pricing' });
+}
+
+viewBatchResult(batchId: string): void {
+  // Navigate to OCR result page with the batch ID
+  this.router.navigate(['/ocr-result', batchId]);
 }
 }

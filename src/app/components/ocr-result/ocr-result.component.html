@@ -13,9 +13,8 @@
       <p class="text-gray-600 dark:text-gray-400 mt-2">Extracted text from your uploaded documents</p>
     </div>
 
-    <!-- Skeleton loading (only when isLoading) -->
+    <!-- Skeleton loading -->
     <div *ngIf="isLoading" class="grid lg:grid-cols-2 gap-6">
-      <!-- Left skeleton -->
       <div class="space-y-4">
         <div class="h-8 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
         <div class="bg-white/70 dark:bg-white/5 rounded-2xl p-4">
@@ -28,7 +27,6 @@
           </div>
         </div>
       </div>
-      <!-- Right skeleton -->
       <div class="bg-white/70 dark:bg-white/5 rounded-2xl p-6">
         <div class="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4"></div>
         <div class="space-y-3">
@@ -48,7 +46,7 @@
       </a>
     </div>
 
-    <!-- Results grid (only when loaded and files exist) -->
+    <!-- Results grid -->
     <div *ngIf="!isLoading && !errorMessage && files.length > 0" class="grid lg:grid-cols-2 gap-6">
       <!-- Left column: file previews -->
       <div class="space-y-4">
@@ -97,8 +95,10 @@
                   rows="15"
                   class="w-full bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-gray-900 dark:text-white font-arabic text-right focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all resize-y"
                   style="direction: rtl; font-family: 'Noto Nastaliq Urdu', serif; font-size: 1rem; line-height: 1.6;"
-                  placeholder="Extracted text"></textarea>
+                  placeholder="Extracted text will appear here..."></textarea>
+
         <div class="flex flex-wrap gap-3 mt-4">
+          <!-- Copy Button -->
           <button (click)="copyToClipboard()"
                   class="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-lg text-gray-700 dark:text-gray-300 transition-all duration-200 hover:border-amber-300 dark:hover:border-amber-500/30">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,13 +106,42 @@
             </svg>
             Copy
           </button>
-          <button (click)="downloadAsTxt()"
-                  class="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-lg text-gray-700 dark:text-gray-300 transition-all duration-200 hover:border-amber-300 dark:hover:border-amber-500/30">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            Download .txt
-          </button>
+
+          <!-- Download Dropdown Menu - Opens Upward -->
+          <div class="relative download-menu-container">
+            <button (click)="toggleDownloadMenu()"
+                    [disabled]="isDownloading"
+                    class="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 dark:bg-white/5 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-lg text-gray-700 dark:text-gray-300 transition-all duration-200 disabled:opacity-50">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              {{ isDownloading ? 'Downloading...' : 'Download' }}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <!-- Dropdown opens UPWARD to avoid being cut off -->
+            <div *ngIf="showDownloadMenu"
+                 class="absolute bottom-full right-0 mb-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+              <button (click)="downloadCurrentFile(); showDownloadMenu = false"
+                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download Current File (.txt)
+              </button>
+              <button (click)="downloadAllFiles(); showDownloadMenu = false"
+                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download All Files (.txt)
+              </button>
+            </div>
+          </div>
+
+          <!-- New Upload Button -->
           <a routerLink="/upload"
              class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-500 dark:to-orange-500 text-white rounded-lg hover:opacity-90 transition-all duration-200 ml-auto shadow-sm hover:shadow-md">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
